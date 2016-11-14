@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/registration"
+        android:checked="true"
+        android:icon="@drawable/ic_registration"
+        android:title="签到"/>
+    <item
+        android:id="@+id/add"
+        android:icon="@drawable/ic_add"
+        android:title="添加"/>
+    <item
+        android:id="@+id/me"
+        android:icon="@drawable/ic_me"
+        android:title="我"/>
+</menu>
