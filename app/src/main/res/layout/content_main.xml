@@ -9,8 +9,8 @@
     android:orientation="vertical"
     tools:context="com.electhuang.here.MainActivity"
     tools:showIn="@layout/app_bar_main">
-    <include
-        layout="@layout/fragment_registration"
+    <FrameLayout
+        android:id="@+id/contentLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
@@ -23,6 +23,5 @@
         android:layout_height="wrap_content"
         app:menu="@menu/bottom_navigation_items"
         >
-
     </android.support.design.widget.BottomNavigationView>
 </LinearLayout>
