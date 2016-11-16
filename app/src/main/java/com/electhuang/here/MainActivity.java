@@ -25,6 +25,16 @@ public class MainActivity extends BaseActivity
 		setContentView(R.layout.activity_main);
 		initBar();
 		initBottomNavigationView();
+		initContent();
+	}
+
+	/**
+	 * 初始化内容区
+	 */
+	private void initContent() {
+		Fragment registrationFragment = new RegistrationFragment();
+		replaceContent(registrationFragment);
+		toolbar.setTitle("这里签到·Here");
 	}
 
 	/**

@@ -13,12 +13,12 @@
         android:id="@+id/contentLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1">
+    </FrameLayout>
     <View
         style="@style/DividerHorizontal"/>
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottomNavigationView"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:menu="@menu/bottom_navigation_items"
