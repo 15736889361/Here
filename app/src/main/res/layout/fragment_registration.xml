@@ -3,10 +3,9 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context="com.electhuang.here.RegistrationFragment">
-
-    <TextView
+    <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+        android:id="@+id/pullLoadMoreRecyclerView"
+        android:layout_margin="10dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="签到Fragment"/>
-
+        android:layout_height="match_parent"/>
 </FrameLayout>
