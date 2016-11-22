@@ -1,4 +1,4 @@
-package com.electhuang.here;
+package com.electhuang.here.activity;
 
 import android.app.Activity;
 import android.os.Build;

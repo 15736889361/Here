@@ -1,4 +1,4 @@
-package com.electhuang.here;
+package com.electhuang.here.activity;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,10 +14,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.electhuang.here.fragment.AddFragment;
+import com.electhuang.here.R;
+import com.electhuang.here.fragment.RegistrationFragment;
+import com.electhuang.here.fragment.SettingFragment;
+
 public class MainActivity extends BaseActivity
 		implements NavigationView.OnNavigationItemSelectedListener {
 
 	private Toolbar toolbar;
+	private RegistrationFragment registrationFragment;
+	private FragmentManager fragmentManager;
+	private AddFragment addFragment;
+	private SettingFragment settingFragment;
+	private Fragment currentFragment;//标志内容区当前显示的Fragment
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +42,15 @@ public class MainActivity extends BaseActivity
 	 * 初始化内容区
 	 */
 	private void initContent() {
-		Fragment registrationFragment = new RegistrationFragment();
-		replaceContent(registrationFragment);
+		registrationFragment = new RegistrationFragment();
+		addFragment = new AddFragment();
+		settingFragment = new SettingFragment();
+		if (fragmentManager == null) {
+			fragmentManager = getSupportFragmentManager();
+		}
+		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		fragmentTransaction.add(R.id.contentLayout, registrationFragment).commit();
+		currentFragment = registrationFragment;
 		toolbar.setTitle("这里签到·Here");
 	}
 
@@ -50,18 +67,24 @@ public class MainActivity extends BaseActivity
 			public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 				switch (item.getItemId()) {
 					case R.id.registration:
-						Fragment registrationFragment = new RegistrationFragment();
-						replaceContent(registrationFragment);
+						if (registrationFragment == null) {
+							registrationFragment = new RegistrationFragment();
+						}
+						switchContent(registrationFragment);
 						toolbar.setTitle("这里签到·Here");
 						break;
 					case R.id.add:
-						Fragment addFragment = new addFragment();
-						replaceContent(addFragment);
+						if (registrationFragment == null) {
+							addFragment = new AddFragment();
+						}
+						switchContent(addFragment);
 						toolbar.setTitle("添加签到");
 						break;
 					case R.id.setting:
-						Fragment settingFragmen = new SettingFragmen();
-						replaceContent(settingFragmen);
+						if (registrationFragment == null) {
+							settingFragment = new SettingFragment();
+						}
+						switchContent(settingFragment);
 						toolbar.setTitle("设置");
 						break;
 				}
@@ -75,11 +98,22 @@ public class MainActivity extends BaseActivity
 	 *
 	 * @param fragment 需要替换成的Fragment
 	 */
-	private void replaceContent(Fragment fragment) {
-		FragmentManager fragmentManager = getSupportFragmentManager();
-		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-		fragmentTransaction.replace(R.id.contentLayout, fragment).commit();
-		invalidateOptionsMenu();
+	private void switchContent(Fragment fragment) {
+		if (currentFragment != fragment) {
+			if (fragmentManager == null) {
+				fragmentManager = getSupportFragmentManager();
+			}
+			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+			if (!fragment.isAdded()) {
+				//隐藏当前的fragment，add下一个到Activity中
+				fragmentTransaction.hide(currentFragment).add(R.id.contentLayout, fragment)
+						.commit();
+			} else {
+				fragmentTransaction.hide(currentFragment).show(fragment).commit();
+			}
+			currentFragment = fragment;
+			invalidateOptionsMenu();
+		}
 	}
 
 	/**
@@ -132,7 +166,6 @@ public class MainActivity extends BaseActivity
 		if (id == R.id.action_settings) {
 			return true;
 		}
-
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -143,16 +176,22 @@ public class MainActivity extends BaseActivity
 		int id = item.getItemId();
 
 		if (id == R.id.registration) {
-			Fragment registrationFragment = new RegistrationFragment();
-			replaceContent(registrationFragment);
+			if (registrationFragment == null) {
+				registrationFragment = new RegistrationFragment();
+			}
+			switchContent(registrationFragment);
 			toolbar.setTitle("这里签到·Here");
 		} else if (id == R.id.add) {
-			Fragment addFragment = new addFragment();
-			replaceContent(addFragment);
+			if (registrationFragment == null) {
+				addFragment = new AddFragment();
+			}
+			switchContent(addFragment);
 			toolbar.setTitle("添加签到");
 		} else if (id == R.id.setting) {
-			Fragment settingFragmen = new SettingFragmen();
-			replaceContent(settingFragmen);
+			if (registrationFragment == null) {
+				settingFragment = new SettingFragment();
+			}
+			switchContent(settingFragment);
 			toolbar.setTitle("设置");
 		} else if (id == R.id.nav_share) {
 

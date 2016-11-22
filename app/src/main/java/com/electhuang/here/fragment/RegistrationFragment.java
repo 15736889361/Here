@@ -1,4 +1,4 @@
-package com.electhuang.here;
+package com.electhuang.here.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.electhuang.here.R;
 import com.electhuang.here.adapter.RecyclerViewAdapter;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
@@ -18,10 +19,6 @@ import java.util.List;
 
 public class RegistrationFragment extends Fragment {
 
-	// 标志位，标志已经初始化完成，因为setUserVisibleHint是在onCreateView之前调用的，在视图未初始化的时候，在lazyLoad当中就使用的话，就会有空指针的异常
-	private boolean isPrepared;
-	//标志当前页面是否可见
-	private boolean isVisible;
 	private PullLoadMoreRecyclerView mPullLoadMoreRecyclerView;
 	private List<String> mDataList = new ArrayList<>();
 	private int page = 1;
@@ -69,7 +66,6 @@ public class RegistrationFragment extends Fragment {
 				loadMore();
 			}
 		});
-		isPrepared = true;
 		setList();
 	}
 
@@ -84,40 +80,6 @@ public class RegistrationFragment extends Fragment {
 		super.onDestroy();
 		Log.e("TAG", "onDestroy()");
 	}
-
-	/*
-	 * Fragment可见2调用，需要结合ViewPager，并且ViewPager的适配器要继承FragmentPagerAdapter
-	 * @param
-	 */
-	/*@Override
-	public void setUserVisibleHint(boolean isVisibleToUser) {
-		super.setUserVisibleHint(isVisibleToUser);
-		//懒加载
-		if (getUserVisibleHint()) {
-			Log.e("TAG", "getUserVisibleHint");
-			isVisible = true;
-			onVisible();
-		} else {
-			isVisible = false;
-			onInvisible();
-		}
-
-	}
-
-	protected void onVisible() {
-		lazyLoad();
-	}
-
-	protected void onInvisible() {
-	}*/
-
-	/*protected void lazyLoad() {
-		if (!isPrepared) {
-			Log.e("TAG", "isVisible()");
-			return;
-		}
-		setList();
-	}*/
 
 	protected void loadMore() {
 		page++;

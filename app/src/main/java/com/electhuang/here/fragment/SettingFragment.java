@@ -1,4 +1,4 @@
-package com.electhuang.here;
+package com.electhuang.here.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,12 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.electhuang.here.R;
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class addFragment extends Fragment {
+public class SettingFragment extends Fragment {
 
-	public addFragment() {
+	public SettingFragment() {
 		// Required empty public constructor
 	}
 
@@ -19,7 +21,7 @@ public class addFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		View view = inflater.inflate(R.layout.fragment_add, container, false);
+		View view = inflater.inflate(R.layout.fragment_setting, container, false);
 		return view;
 	}
 
