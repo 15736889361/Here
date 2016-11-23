@@ -49,6 +49,7 @@ public class MainActivity extends BaseActivity
 			fragmentManager = getSupportFragmentManager();
 		}
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
 		fragmentTransaction.add(R.id.contentLayout, registrationFragment).commit();
 		currentFragment = registrationFragment;
 		toolbar.setTitle("这里签到·Here");
@@ -104,6 +105,7 @@ public class MainActivity extends BaseActivity
 				fragmentManager = getSupportFragmentManager();
 			}
 			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+			fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
 			if (!fragment.isAdded()) {
 				//隐藏当前的fragment，add下一个到Activity中
 				fragmentTransaction.hide(currentFragment).add(R.id.contentLayout, fragment)
