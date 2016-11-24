@@ -1,4 +1,4 @@
-package com.electhuang.here.fragment;
+package com.electhuang.here.view;
 
 import android.content.Context;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package com.electhuang.here.activity;
+package com.electhuang.here.view;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,13 +14,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.electhuang.here.fragment.AddFragment;
 import com.electhuang.here.R;
-import com.electhuang.here.fragment.RegistrationFragment;
-import com.electhuang.here.fragment.SettingFragment;
+import com.electhuang.here.databeans.Course;
+import com.electhuang.here.view.iviewbind.IMainActivity;
+
+import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity
-		implements NavigationView.OnNavigationItemSelectedListener {
+		implements NavigationView.OnNavigationItemSelectedListener,IMainActivity {
 
 	private Toolbar toolbar;
 	private RegistrationFragment registrationFragment;
@@ -204,5 +205,20 @@ public class MainActivity extends BaseActivity
 		DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawer.closeDrawer(GravityCompat.START);
 		return true;
+	}
+
+	@Override
+	public void loadData() {
+
+	}
+
+	@Override
+	public void loadDataSuccess(ArrayList<Course> courseList) {
+
+	}
+
+	@Override
+	public void loadDataFail(String errCode, String errMsg) {
+
 	}
 }

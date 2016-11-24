@@ -1,13 +1,48 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".fragment.AddFragment">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:card_view="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context=".view.AddFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView_create"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="添加Fragment"/>
+        android:layout_height="150dp"
+        android:layout_marginBottom="@dimen/card_view_margin_bottom"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:foreground="?attr/selectableItemBackground"
+        card_view:cardBackgroundColor="?android:colorBackground"
+        card_view:cardCornerRadius="10dp"
+        card_view:cardElevation="5dp">
 
-</FrameLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="注册课程"/>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView_join"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginBottom="@dimen/card_view_margin_bottom"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:foreground="?attr/selectableItemBackground"
+        card_view:cardBackgroundColor="?android:colorBackground"
+        card_view:cardCornerRadius="10dp"
+        card_view:cardElevation="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="加入课程"/>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

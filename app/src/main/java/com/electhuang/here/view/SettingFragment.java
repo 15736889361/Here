@@ -1,4 +1,4 @@
-package com.electhuang.here.fragment;
+package com.electhuang.here.view;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
