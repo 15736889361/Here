@@ -1,5 +1,7 @@
 package com.electhuang.here.model;
 
+import android.util.Log;
+
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.LogInCallback;
@@ -24,7 +26,8 @@ public class LoginModel implements ILoginModel {
 				if (e == null) {
 					presenter.loginSucceed();
 				} else {
-					presenter.loginFail(e.getMessage());
+					Log.e("TAG", "login:"+e.toString());
+					presenter.loginFail();
 				}
 			}
 		});

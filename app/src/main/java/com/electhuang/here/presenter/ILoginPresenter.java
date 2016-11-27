@@ -7,7 +7,7 @@ public interface ILoginPresenter {
 
 	void login(String username,String password);
 
-	void loginFail(String error);
+	void loginFail();
 
 	void loginSucceed();
 }

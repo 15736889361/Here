@@ -18,7 +18,7 @@ public interface ILoginActivity {
 	/**
 	 * 登陆失败
 	 */
-	void loginFail(String error);
+	void loginFail();
 
 	/**
 	 * 显示登陆进度条

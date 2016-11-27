@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
@@ -27,7 +28,7 @@ import com.electhuang.here.view.iviewbind.ILoginActivity;
 public class LoginActivity extends AppCompatActivity implements ILoginActivity, View
 		.OnClickListener {
 
-	LoginPresenter loginPresenter = new LoginPresenter(LoginActivity.this);
+	private LoginPresenter loginPresenter = new LoginPresenter(LoginActivity.this);
 	private AutoCompleteTextView et_mUsername;
 	private EditText et_mPassword;
 	private ScrollView mLoginFormView;
@@ -49,8 +50,9 @@ public class LoginActivity extends AppCompatActivity implements ILoginActivity, 
 			LoginActivity.this.finish();
 		}
 
-		//getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		//getSupportActionBar().setTitle(getString(R.string.login));
+		//ActionBar actionBar = getSupportActionBar();
+		//actionBar.setDisplayHomeAsUpEnabled(true);
+		//actionBar.setTitle(getString(R.string.login));
 
 		et_mUsername = (AutoCompleteTextView) findViewById(R.id.username);
 		et_mPassword = (EditText) findViewById(R.id.password);
@@ -111,9 +113,9 @@ public class LoginActivity extends AppCompatActivity implements ILoginActivity, 
 	}
 
 	@Override
-	public void loginFail(String error) {
+	public void loginFail() {
 		showProgress(false);
-		Toast.makeText(LoginActivity.this, error, Toast.LENGTH_SHORT).show();
+		Toast.makeText(LoginActivity.this, "用户不存在或密码错误", Toast.LENGTH_SHORT).show();
 	}
 
 	/**
@@ -164,7 +166,17 @@ public class LoginActivity extends AppCompatActivity implements ILoginActivity, 
 				break;
 			case R.id.register_button:
 				startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+				LoginActivity.this.finish();
 				break;
 		}
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			finish();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 }

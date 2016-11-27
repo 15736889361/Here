@@ -24,8 +24,8 @@ public class LoginPresenter implements ILoginPresenter {
 	}
 
 	@Override
-	public void loginFail(String error) {
-		loginActivity.loginFail(error);
+	public void loginFail() {
+		loginActivity.loginFail();
 	}
 
 	@Override
