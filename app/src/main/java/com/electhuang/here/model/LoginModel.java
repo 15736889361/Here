@@ -19,8 +19,10 @@ public class LoginModel implements ILoginModel {
 	}
 
 	@Override
-	public void login(String username, String password) {
-		AVUser.logInInBackground(username, password, new LogInCallback<AVUser>() {
+	public void login(String phoneNumber, String password) {
+		AVUser.loginByMobilePhoneNumberInBackground(phoneNumber, password, new
+				LogInCallback<AVUser>() {
+
 			@Override
 			public void done(AVUser avUser, AVException e) {
 				if (e == null) {

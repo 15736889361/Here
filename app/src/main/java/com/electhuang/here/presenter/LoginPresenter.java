@@ -18,9 +18,9 @@ public class LoginPresenter implements ILoginPresenter {
 	}
 
 	@Override
-	public void login(String username, String password) {
+	public void login(String phoneNumber, String password) {
 		loginActivity.showProgress(true);
-		loginModel.login(username, password);
+		loginModel.login(phoneNumber, password);
 	}
 
 	@Override

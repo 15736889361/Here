@@ -6,7 +6,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +23,7 @@ import com.electhuang.here.view.iviewbind.IVerifyCodeActivity;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class VerifyCodeActivity extends AppCompatActivity implements IVerifyCodeActivity, View
+public class VerifyCodeActivity extends BaseActivity implements IVerifyCodeActivity, View
 		.OnClickListener {
 	
 	private ScrollView verify_form;
@@ -35,6 +35,7 @@ public class VerifyCodeActivity extends AppCompatActivity implements IVerifyCode
 	private String phoneNumber;
 	private Timer countDownTimer;
 	private MyTimerTask myTimerTask;
+	private boolean isVerified = false;
 
 	private VerifyPresenter verifyPresenter = new VerifyPresenter(this);
 	
@@ -45,9 +46,22 @@ public class VerifyCodeActivity extends AppCompatActivity implements IVerifyCode
 		Intent intent = getIntent();
 		phoneNumber = intent.getStringExtra("phoneNumber");
 		initView();
+		initBar();
 		countDownTimer = new Timer();
 		myTimerTask = new MyTimerTask();
 		countDownTimer.schedule(myTimerTask, 0, 1000);
+	}
+
+	/**
+	 * 初始化ToolBar和NavigationView
+	 */
+	private void initBar() {
+		Toolbar toolbar;
+		//设置状态栏颜色与应用主题颜色一致
+		setStatusBarColor(this, 0xFF0288D1);
+		toolbar = (Toolbar) findViewById(R.id.toolbar);
+		toolbar.setTitle(getString(R.string.verify_phone));
+		setSupportActionBar(toolbar);
 	}
 	
 	private void initView() {
@@ -96,6 +110,7 @@ public class VerifyCodeActivity extends AppCompatActivity implements IVerifyCode
 	@Override
 	public void showVerifyResult(boolean enable) {
 		if (enable) {
+			isVerified = true;
 			startActivity(new Intent(VerifyCodeActivity.this, MainActivity.class));
 		} else {
 			showProgress(false);
@@ -131,7 +146,13 @@ public class VerifyCodeActivity extends AppCompatActivity implements IVerifyCode
 			verify_progress.setVisibility(enable ? View.VISIBLE : View.GONE);
 		}
 	}
-	
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		verifyPresenter.deleteUserIfVerifyFail(phoneNumber);
+	}
+
 	/**
 	 * 判断输入的验证码是否合法
 	 *

@@ -47,4 +47,9 @@ public class VerifyPresenter implements IVerifyPresenter {
 	public void getVerifyCodeFail() {
 		verifyCodeActivity.showGetVerifyCodeResult(false);
 	}
+
+	@Override
+	public void deleteUserIfVerifyFail(String phoneNumber) {
+		verifyModel.deleteUserIfVerifyFail(phoneNumber);
+	}
 }

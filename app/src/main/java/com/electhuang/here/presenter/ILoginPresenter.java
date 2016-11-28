@@ -5,7 +5,7 @@ package com.electhuang.here.presenter;
  */
 public interface ILoginPresenter {
 
-	void login(String username,String password);
+	void login(String phoneNumber,String password);
 
 	void loginFail();
 

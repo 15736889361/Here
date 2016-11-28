@@ -38,4 +38,10 @@ public interface IVerifyPresenter {
 	 * 验证码发送失败
 	 */
 	void getVerifyCodeFail();
+
+	/**
+	 * 如果验证失败则把注册的用户删除
+	 * @param phoneNumber
+	 */
+	void deleteUserIfVerifyFail(String phoneNumber);
 }

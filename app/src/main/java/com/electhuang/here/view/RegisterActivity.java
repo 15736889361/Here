@@ -6,7 +6,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -22,7 +22,7 @@ import com.electhuang.here.R;
 import com.electhuang.here.presenter.RegisterPresenter;
 import com.electhuang.here.view.iviewbind.IRegisterActivity;
 
-public class RegisterActivity extends AppCompatActivity implements IRegisterActivity, View
+public class RegisterActivity extends BaseActivity implements IRegisterActivity, View
 		.OnClickListener {
 	
 	private RegisterPresenter registerPresenter = new RegisterPresenter(RegisterActivity.this);
@@ -39,6 +39,19 @@ public class RegisterActivity extends AppCompatActivity implements IRegisterActi
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);
 		initView();
+		initBar();
+	}
+
+	/**
+	 * 初始化ToolBar和NavigationView
+	 */
+	private void initBar() {
+		Toolbar toolbar;
+		//设置状态栏颜色与应用主题颜色一致
+		setStatusBarColor(this, 0xFF0288D1);
+		toolbar = (Toolbar) findViewById(R.id.toolbar);
+		toolbar.setTitle(getString(R.string.register));
+		setSupportActionBar(toolbar);
 	}
 	
 	private void initView() {

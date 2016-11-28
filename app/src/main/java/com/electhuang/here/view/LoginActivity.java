@@ -6,7 +6,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -25,11 +25,12 @@ import com.electhuang.here.R;
 import com.electhuang.here.presenter.LoginPresenter;
 import com.electhuang.here.view.iviewbind.ILoginActivity;
 
-public class LoginActivity extends AppCompatActivity implements ILoginActivity, View
+public class LoginActivity extends BaseActivity implements ILoginActivity, View
 		.OnClickListener {
 
+	private Toolbar toolbar;
 	private LoginPresenter loginPresenter = new LoginPresenter(LoginActivity.this);
-	private AutoCompleteTextView et_mUsername;
+	private AutoCompleteTextView et_mPhoneNumber;
 	private EditText et_mPassword;
 	private ScrollView mLoginFormView;
 	private ProgressBar login_progress;
@@ -39,6 +40,18 @@ public class LoginActivity extends AppCompatActivity implements ILoginActivity, 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		initView();
+		initBar();
+	}
+
+	/**
+	 * 初始化ToolBar和NavigationView
+	 */
+	private void initBar() {
+		//设置状态栏颜色与应用主题颜色一致
+		setStatusBarColor(this, 0xFF0288D1);
+		toolbar = (Toolbar) findViewById(R.id.toolbar);
+		toolbar.setTitle(getString(R.string.login));
+		setSupportActionBar(toolbar);
 	}
 
 	/**
@@ -54,7 +67,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginActivity, 
 		//actionBar.setDisplayHomeAsUpEnabled(true);
 		//actionBar.setTitle(getString(R.string.login));
 
-		et_mUsername = (AutoCompleteTextView) findViewById(R.id.username);
+		et_mPhoneNumber = (AutoCompleteTextView) findViewById(R.id.phoneNumber);
 		et_mPassword = (EditText) findViewById(R.id.password);
 		mLoginFormView = (ScrollView) findViewById(R.id.login_form);
 		login_progress = (ProgressBar) findViewById(R.id.login_progress);
@@ -80,13 +93,13 @@ public class LoginActivity extends AppCompatActivity implements ILoginActivity, 
 	 */
 	@Override
 	public void login() {
-		et_mUsername.setError(null);
+		et_mPhoneNumber.setError(null);
 		et_mPassword.setError(null);
 
 		boolean cancel = false;
 		View focusView = null;
 
-		String username = et_mUsername.getText().toString().trim();
+		String phoneNumber = et_mPhoneNumber.getText().toString().trim();
 		String password = et_mPassword.getText().toString().trim();
 
 		if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
@@ -94,22 +107,22 @@ public class LoginActivity extends AppCompatActivity implements ILoginActivity, 
 			focusView = et_mPassword;
 			cancel = true;
 		}
-		if (TextUtils.isEmpty(username)) {
-			et_mUsername.setError(getString(R.string.error_field_required));
-			focusView = et_mUsername;
+		if (TextUtils.isEmpty(phoneNumber)) {
+			et_mPhoneNumber.setError(getString(R.string.error_field_required));
+			focusView = et_mPhoneNumber;
 			cancel = true;
 		}
 		if (cancel) {
 			focusView.requestFocus();
 		} else {
-			loginPresenter.login(username, password);
+			loginPresenter.login(phoneNumber, password);
 		}
 	}
 
 	@Override
 	public void loginSucceed() {
-		LoginActivity.this.finish();
 		startActivity(new Intent(LoginActivity.this, MainActivity.class));
+		LoginActivity.this.finish();
 	}
 
 	@Override

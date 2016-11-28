@@ -5,5 +5,5 @@ package com.electhuang.here.model;
  */
 public interface ILoginModel {
 
-	void login(String username, String password);
+	void login(String phoneNumber, String password);
 }
