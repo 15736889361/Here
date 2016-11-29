@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
@@ -62,11 +61,6 @@ public class LoginActivity extends BaseActivity implements ILoginActivity, View
 			startActivity(new Intent(LoginActivity.this, MainActivity.class));
 			LoginActivity.this.finish();
 		}
-
-		//ActionBar actionBar = getSupportActionBar();
-		//actionBar.setDisplayHomeAsUpEnabled(true);
-		//actionBar.setTitle(getString(R.string.login));
-
 		et_mPhoneNumber = (AutoCompleteTextView) findViewById(R.id.phoneNumber);
 		et_mPassword = (EditText) findViewById(R.id.password);
 		mLoginFormView = (ScrollView) findViewById(R.id.login_form);
@@ -112,9 +106,20 @@ public class LoginActivity extends BaseActivity implements ILoginActivity, View
 			focusView = et_mPhoneNumber;
 			cancel = true;
 		}
+		if (TextUtils.isEmpty(password)) {
+			et_mPhoneNumber.setError(getString(R.string.error_field_required));
+			focusView = et_mPassword;
+			cancel = true;
+		}
+		if (!TextUtils.isEmpty(phoneNumber) && !isPhoneNumber(phoneNumber)) {
+			et_mPhoneNumber.setError(getString(R.string.error_invalid_phone));
+			focusView = et_mPhoneNumber;
+			cancel = true;
+		}
 		if (cancel) {
 			focusView.requestFocus();
 		} else {
+			showProgress(true);
 			loginPresenter.login(phoneNumber, password);
 		}
 	}
@@ -138,8 +143,23 @@ public class LoginActivity extends BaseActivity implements ILoginActivity, View
 	 * @return
 	 */
 	private boolean isPasswordValid(String password) {
-		//TODO: Replace this with your own logic
 		return password.length() >= 6;
+	}
+
+	/**
+	 * 判断手机号是否合法
+	 *
+	 * @param phoneNumber 用户输入的手机号码
+	 * @return 手机号正确则返回的true，不是手机号则返回false
+	 */
+	private boolean isPhoneNumber(String phoneNumber) {
+		//"[1]"代表第1位为数字1，"[358]"代表第二位可以为3、5、8中的一个，"\\d{9}"代表后面是可以是0～9的数字，有9位。
+		String telRegex = "[1][358]\\d{9}";
+		if (!TextUtils.isEmpty(phoneNumber)) {
+			return phoneNumber.matches(telRegex);
+		} else {
+			return false;
+		}
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
@@ -182,14 +202,5 @@ public class LoginActivity extends BaseActivity implements ILoginActivity, View
 				LoginActivity.this.finish();
 				break;
 		}
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == android.R.id.home) {
-			finish();
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 }

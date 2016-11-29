@@ -1,5 +1,6 @@
 package com.electhuang.here.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -15,7 +16,7 @@ import com.electhuang.here.R;
 public class AddFragment extends Fragment implements View.OnClickListener {
 
 	public AddFragment() {
-		// Required empty public constructor
+
 	}
 
 	@Override
@@ -33,6 +34,8 @@ public class AddFragment extends Fragment implements View.OnClickListener {
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.cardView_create:
+				Intent intent = new Intent(getActivity(), CreateCourseActivity.class);
+				startActivity(intent);
 				break;
 			case R.id.cardView_join:
 				break;

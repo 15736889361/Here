@@ -31,7 +31,7 @@ public class RegisterActivity extends BaseActivity implements IRegisterActivity,
 	private ScrollView register_form;
 	private ProgressBar register_progress;
 	private EditText et_password;
-	private EditText et_username;
+	private AutoCompleteTextView et_username;
 	private String phoneNumber;
 	
 	@Override
@@ -60,7 +60,7 @@ public class RegisterActivity extends BaseActivity implements IRegisterActivity,
 		et_mobilePhone = (AutoCompleteTextView) findViewById(R.id
 				.et_mobilePhone);
 		et_password = (EditText) findViewById(R.id.et_password);
-		et_username = (EditText) findViewById(R.id.et_username);
+		et_username = (AutoCompleteTextView) findViewById(R.id.et_username);
 		btn_register = (Button) findViewById(R.id.phone_register_button);
 		register_form = (ScrollView) findViewById(R.id.register_form);
 		register_progress = (ProgressBar) findViewById(R.id.register_progress);
@@ -130,7 +130,12 @@ public class RegisterActivity extends BaseActivity implements IRegisterActivity,
 		}
 		if (TextUtils.isEmpty(phoneNumber)) {
 			et_mobilePhone.setError(getString(R.string.error_field_required));
-			focusView = et_username;
+			focusView = et_mobilePhone;
+			cancel = true;
+		}
+		if (TextUtils.isEmpty(password)) {
+			et_password.setError(getString(R.string.error_field_required));
+			focusView = et_password;
 			cancel = true;
 		}
 		if (cancel) {

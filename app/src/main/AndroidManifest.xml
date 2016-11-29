@@ -33,6 +33,8 @@
         </activity>
         <activity android:name=".view.VerifyCodeActivity">
         </activity>
+        <activity android:name=".view.CreateCourseActivity">
+        </activity>
     </application>
 
 </manifest>

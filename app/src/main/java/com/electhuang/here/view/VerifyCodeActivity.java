@@ -112,6 +112,7 @@ public class VerifyCodeActivity extends BaseActivity implements IVerifyCodeActiv
 		if (enable) {
 			isVerified = true;
 			startActivity(new Intent(VerifyCodeActivity.this, MainActivity.class));
+			finish();
 		} else {
 			showProgress(false);
 			Toast.makeText(VerifyCodeActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
@@ -150,7 +151,9 @@ public class VerifyCodeActivity extends BaseActivity implements IVerifyCodeActiv
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		verifyPresenter.deleteUserIfVerifyFail(phoneNumber);
+		if (!isVerified) {
+			verifyPresenter.deleteUserIfVerifyFail(phoneNumber);
+		}
 	}
 
 	/**

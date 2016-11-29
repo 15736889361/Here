@@ -1,5 +1,6 @@
 package com.electhuang.here.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -16,12 +17,14 @@ import android.view.MenuItem;
 
 import com.electhuang.here.R;
 import com.electhuang.here.databeans.Course;
+import com.electhuang.here.presenter.IMainPresenter;
+import com.electhuang.here.presenter.MainPresenter;
 import com.electhuang.here.view.iviewbind.IMainActivity;
 
 import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity
-		implements NavigationView.OnNavigationItemSelectedListener,IMainActivity {
+		implements NavigationView.OnNavigationItemSelectedListener, IMainActivity {
 
 	private Toolbar toolbar;
 	private RegistrationFragment registrationFragment;
@@ -29,6 +32,8 @@ public class MainActivity extends BaseActivity
 	private AddFragment addFragment;
 	private SettingFragment settingFragment;
 	private Fragment currentFragment;//标志内容区当前显示的Fragment
+
+	private IMainPresenter mainPresenter = new MainPresenter(this);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +111,8 @@ public class MainActivity extends BaseActivity
 				fragmentManager = getSupportFragmentManager();
 			}
 			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-			fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+			fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim
+					.fade_out);
 			if (!fragment.isAdded()) {
 				//隐藏当前的fragment，add下一个到Activity中
 				fragmentTransaction.hide(currentFragment).add(R.id.contentLayout, fragment)
@@ -160,13 +166,13 @@ public class MainActivity extends BaseActivity
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 
 		//noinspection SimplifiableIfStatement
-		if (id == R.id.action_settings) {
+		if (id == R.id.action_logout) {
+			mainPresenter.logout();
+			startActivity(new Intent(MainActivity.this, LoginActivity.class));
+			finish();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
