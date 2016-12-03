@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.electhuang.here.R;
 import com.electhuang.here.databeans.Course;
@@ -26,7 +27,6 @@ import java.util.ArrayList;
 public class MainActivity extends BaseActivity
 		implements NavigationView.OnNavigationItemSelectedListener, IMainActivity {
 
-	private Toolbar toolbar;
 	private RegistrationFragment registrationFragment;
 	private FragmentManager fragmentManager;
 	private AddFragment addFragment;
@@ -34,12 +34,14 @@ public class MainActivity extends BaseActivity
 	private Fragment currentFragment;//标志内容区当前显示的Fragment
 
 	private IMainPresenter mainPresenter = new MainPresenter(this);
+	private Toolbar toolbar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		initBar();
+		toolbar = initToolbar("这里签到·Here");
+		initDrawer(toolbar);
 		initBottomNavigationView();
 		initContent();
 	}
@@ -58,7 +60,6 @@ public class MainActivity extends BaseActivity
 		fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
 		fragmentTransaction.add(R.id.contentLayout, registrationFragment).commit();
 		currentFragment = registrationFragment;
-		toolbar.setTitle("这里签到·Here");
 	}
 
 	/**
@@ -126,22 +127,28 @@ public class MainActivity extends BaseActivity
 	}
 
 	/**
-	 * 初始化ToolBar和NavigationView
+	 * 初始化抽屉
+	 *
+	 * @param toolbar
 	 */
-	private void initBar() {
-		//设置状态栏颜色与应用主题颜色一致
-		setStatusBarColor(this, 0xFF0288D1);
-		toolbar = (Toolbar) findViewById(R.id.toolbar);
-		toolbar.setTitle("这里签到·Here");
-		setSupportActionBar(toolbar);
+	public void initDrawer(Toolbar toolbar) {
+		DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		if (toolbar != null) {
+			ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+					toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+				@Override
+				public void onDrawerOpened(View drawerView) {
+					super.onDrawerOpened(drawerView);
+				}
 
-		DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-		ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-				this, drawer, toolbar, R.string.navigation_drawer_open, R.string
-				.navigation_drawer_close);
-
-		drawer.addDrawerListener(toggle);
-		toggle.syncState();
+				@Override
+				public void onDrawerClosed(View drawerView) {
+					super.onDrawerClosed(drawerView);
+				}
+			};
+			mDrawerToggle.syncState();
+			mDrawerLayout.addDrawerListener(mDrawerToggle);
+		}
 
 		NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 		navigationView.setNavigationItemSelectedListener(this);
@@ -178,6 +185,12 @@ public class MainActivity extends BaseActivity
 		return super.onOptionsItemSelected(item);
 	}
 
+	/**
+	 * 抽屉的点击监听
+	 *
+	 * @param item
+	 * @return
+	 */
 	@SuppressWarnings("StatementWithEmptyBody")
 	@Override
 	public boolean onNavigationItemSelected(MenuItem item) {

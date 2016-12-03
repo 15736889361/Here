@@ -9,11 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.electhuang.here.R;
+import com.electhuang.here.view.iviewbind.BaseFragment;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddFragment extends Fragment implements View.OnClickListener {
+public class AddFragment extends BaseFragment implements View.OnClickListener {
 
 	public AddFragment() {
 

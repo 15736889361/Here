@@ -39,18 +39,7 @@ public class LoginActivity extends BaseActivity implements ILoginActivity, View
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		initView();
-		initBar();
-	}
-
-	/**
-	 * 初始化ToolBar和NavigationView
-	 */
-	private void initBar() {
-		//设置状态栏颜色与应用主题颜色一致
-		setStatusBarColor(this, 0xFF0288D1);
-		toolbar = (Toolbar) findViewById(R.id.toolbar);
-		toolbar.setTitle(getString(R.string.login));
-		setSupportActionBar(toolbar);
+		initToolbar(getString(R.string.login));
 	}
 
 	/**

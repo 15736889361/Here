@@ -6,7 +6,6 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -27,7 +26,6 @@ public class RegisterActivity extends BaseActivity implements IRegisterActivity,
 	
 	private RegisterPresenter registerPresenter = new RegisterPresenter(RegisterActivity.this);
 	private AutoCompleteTextView et_mobilePhone;
-	private Button btn_register;
 	private ScrollView register_form;
 	private ProgressBar register_progress;
 	private EditText et_password;
@@ -39,19 +37,7 @@ public class RegisterActivity extends BaseActivity implements IRegisterActivity,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);
 		initView();
-		initBar();
-	}
-
-	/**
-	 * 初始化ToolBar和NavigationView
-	 */
-	private void initBar() {
-		Toolbar toolbar;
-		//设置状态栏颜色与应用主题颜色一致
-		setStatusBarColor(this, 0xFF0288D1);
-		toolbar = (Toolbar) findViewById(R.id.toolbar);
-		toolbar.setTitle(getString(R.string.register));
-		setSupportActionBar(toolbar);
+		initToolbar(getString(R.string.register));
 	}
 	
 	private void initView() {
@@ -61,7 +47,7 @@ public class RegisterActivity extends BaseActivity implements IRegisterActivity,
 				.et_mobilePhone);
 		et_password = (EditText) findViewById(R.id.et_password);
 		et_username = (AutoCompleteTextView) findViewById(R.id.et_username);
-		btn_register = (Button) findViewById(R.id.phone_register_button);
+		Button btn_register = (Button) findViewById(R.id.phone_register_button);
 		register_form = (ScrollView) findViewById(R.id.register_form);
 		register_progress = (ProgressBar) findViewById(R.id.register_progress);
 		

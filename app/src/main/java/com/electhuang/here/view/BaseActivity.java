@@ -4,27 +4,55 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+
+import com.electhuang.here.R;
 
 /**
  * Created by elecdog on 2016/11/15.
  */
 public class BaseActivity extends AppCompatActivity {
 
+	public Activity mActivity;
+
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mActivity = this;
 	}
 
-	@Override
-	public void setContentView(@LayoutRes int layoutResID) {
-		super.setContentView(layoutResID);
+	public Toolbar initToolbarAsHome() {
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(false);
+		}
+		return toolbar;
+	}
+
+	/**
+	 * 初始化状态栏
+	 * @param title
+	 * @return
+	 */
+	public Toolbar initToolbar(String title) {
+		Toolbar toolbar =  (Toolbar) findViewById(R.id.toolbar);
+		setStatusBarColor(mActivity,0xFF0288d1);
+		toolbar.setTitle(title);
+		setSupportActionBar(toolbar);
+		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+		}
+		return toolbar;
 	}
 
 	/**
@@ -71,5 +99,18 @@ public class BaseActivity extends AppCompatActivity {
 		statusView.setLayoutParams(params);
 		statusView.setBackgroundColor(color);
 		return statusView;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				super.onBackPressed();
+				break;
+			default:
+				//对没有处理的事件，交给父类来处理
+				return super.onOptionsItemSelected(item);
+		}
+		return true;
 	}
 }

@@ -7,11 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.electhuang.here.R;
+import com.electhuang.here.view.iviewbind.BaseFragment;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingFragment extends Fragment {
+public class SettingFragment extends BaseFragment {
 
 	public SettingFragment() {
 		// Required empty public constructor

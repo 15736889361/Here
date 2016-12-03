@@ -6,7 +6,6 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -30,7 +29,6 @@ public class VerifyCodeActivity extends BaseActivity implements IVerifyCodeActiv
 	private ProgressBar verify_progress;
 	private EditText et_verifyCode;
 	private Button btn_get_verifyCode;
-	private Button btn_verify;
 	private int countDowntime = 60;
 	private String phoneNumber;
 	private Timer countDownTimer;
@@ -46,33 +44,19 @@ public class VerifyCodeActivity extends BaseActivity implements IVerifyCodeActiv
 		Intent intent = getIntent();
 		phoneNumber = intent.getStringExtra("phoneNumber");
 		initView();
-		initBar();
+		initToolbar(getString(R.string.verify_phone));
 		countDownTimer = new Timer();
 		myTimerTask = new MyTimerTask();
 		countDownTimer.schedule(myTimerTask, 0, 1000);
 	}
-
-	/**
-	 * 初始化ToolBar和NavigationView
-	 */
-	private void initBar() {
-		Toolbar toolbar;
-		//设置状态栏颜色与应用主题颜色一致
-		setStatusBarColor(this, 0xFF0288D1);
-		toolbar = (Toolbar) findViewById(R.id.toolbar);
-		toolbar.setTitle(getString(R.string.verify_phone));
-		setSupportActionBar(toolbar);
-	}
 	
 	private void initView() {
-		//getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		
 		verify_form = (ScrollView) findViewById(R.id.verify_form);
 		verify_progress = (ProgressBar) findViewById(R.id.verify_progress);
 		
 		et_verifyCode = (EditText) findViewById(R.id.et_verifyCode);
 		btn_get_verifyCode = (Button) findViewById(R.id.btn_get_verifyCode);
-		btn_verify = (Button) findViewById(R.id.btn_verify);
+		Button btn_verify = (Button) findViewById(R.id.btn_verify);
 		
 		btn_get_verifyCode.setOnClickListener(this);
 		btn_verify.setOnClickListener(this);
