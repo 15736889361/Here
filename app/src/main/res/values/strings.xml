@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Registration·Here</string>
+    <string name="app_name">Reg·Here</string>
     <string name="app_title_name">Registration·Here</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -17,7 +17,7 @@
     <string name="isRepeat">Repeat:</string>
     <string name="description">Description:</string>
     <string name="action_logout">Logout</string>
-    <string name="course_address">Courese Address:</string>
+    <string name="classroom">Classroom:</string>
     <string name="error_field_required">Require</string>
     <string name="error_incorrect_password">Password Wrong</string>
     <string name="error_invalid_password">Must more than 6 words</string>
@@ -39,4 +39,14 @@
     <string name="yes">Yse</string>
     <string name="course_description_hint">describe the course</string>
     <string name="cancel">Cancel</string>
+    <string name="get_registration_location">Click to get the location to registration</string>
+    <string name="week_sunday">Sunday</string>
+    <string name="week_monday">Monday</string>
+    <string name="week_tuesday">Tuesday</string>
+    <string name="week_wednesday">Wednesday</string>
+    <string name="week_thursday">Thursday</string>
+    <string name="week_friday">Friday</string>
+    <string name="week_saturday">Saturday</string>
+    <string name="succeed">succeed</string>
+    <string name="error">error</string>
 </resources>

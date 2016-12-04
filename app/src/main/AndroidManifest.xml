@@ -20,12 +20,6 @@
         </activity>
         <activity
             android:name=".view.MainActivity"
-            android:label="@string/app_title_name"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:label="@string/login"
-            android:name=".view.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -34,13 +28,18 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".view.LoginActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity
             android:name=".view.RegisterActivity"
             android:label="@string/title_activity_register"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:label="@string/verify_phone"
             android:name=".view.VerifyCodeActivity"
+            android:label="@string/verify_phone"
             android:screenOrientation="portrait">
         </activity>
         <activity

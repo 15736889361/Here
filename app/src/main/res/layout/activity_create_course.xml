@@ -36,9 +36,9 @@
         android:layout_marginTop="5dp">
 
         <AutoCompleteTextView
-            android:id="@+id/tv_course_address"
+            android:id="@+id/tv_classroom"
             style="@style/auto_editText_style"
-            android:hint="@string/course_address"
+            android:hint="@string/classroom"
             />
 
     </android.support.design.widget.TextInputLayout>
@@ -114,6 +114,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:orientation="horizontal">
 
         <TextView
