@@ -9,7 +9,8 @@ import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.DeleteCallback;
 import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.RequestMobileCodeCallback;
-import com.electhuang.here.presenter.IVerifyPresenter;
+import com.electhuang.here.model.imodelbind.IVerifyModel;
+import com.electhuang.here.presenter.ipresenterbind.IVerifyPresenter;
 
 import java.util.List;
 

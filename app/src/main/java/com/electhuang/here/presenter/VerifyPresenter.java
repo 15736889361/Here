@@ -1,7 +1,8 @@
 package com.electhuang.here.presenter;
 
-import com.electhuang.here.model.IVerifyModel;
+import com.electhuang.here.model.imodelbind.IVerifyModel;
 import com.electhuang.here.model.VerifyModel;
+import com.electhuang.here.presenter.ipresenterbind.IVerifyPresenter;
 import com.electhuang.here.view.VerifyCodeActivity;
 import com.electhuang.here.view.iviewbind.IVerifyCodeActivity;
 

@@ -46,4 +46,7 @@
     <string name="week_wednesday">星期三</string>
     <string name="succeed">成功</string>
     <string name="error">出错</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="add_course">添加课程</string>
 </resources>

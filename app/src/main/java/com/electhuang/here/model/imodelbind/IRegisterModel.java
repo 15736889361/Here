@@ -1,4 +1,4 @@
-package com.electhuang.here.model;
+package com.electhuang.here.model.imodelbind;
 
 /**
  * Created by elecdog on 2016/11/27.

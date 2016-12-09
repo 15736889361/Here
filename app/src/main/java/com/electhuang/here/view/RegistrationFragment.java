@@ -11,19 +11,28 @@ import android.view.ViewGroup;
 
 import com.electhuang.here.R;
 import com.electhuang.here.adapter.RecyclerViewAdapter;
+import com.electhuang.here.application.HereApplication;
+import com.electhuang.here.beans.Course;
+import com.electhuang.here.presenter.RegistrationPresenter;
+import com.electhuang.here.presenter.ipresenterbind.IRegistrationPresenter;
 import com.electhuang.here.view.iviewbind.BaseFragment;
+import com.electhuang.here.view.iviewbind.IRegistrationFragment;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegistrationFragment extends BaseFragment {
+/**
+ * 选择课程签到页面
+ */
+public class RegistrationFragment extends BaseFragment implements IRegistrationFragment {
 
 	private PullLoadMoreRecyclerView mPullLoadMoreRecyclerView;
-	private List<String> mDataList = new ArrayList<>();
+	private List<Course> mCourseList = new ArrayList<Course>();
 	private int page = 1;
 	private Handler handler;
 	private RecyclerViewAdapter mRecyclerViewAdapter;
+	private IRegistrationPresenter registrationPresenter = new RegistrationPresenter();
 
 	@Override
 	public void onAttach(Context context) {
@@ -48,7 +57,7 @@ public class RegistrationFragment extends BaseFragment {
 		mPullLoadMoreRecyclerView.setLinearLayout();
 		mPullLoadMoreRecyclerView.setRefreshing(true);
 		mPullLoadMoreRecyclerView.setFooterViewText("loading");
-		mRecyclerViewAdapter = new RecyclerViewAdapter(mDataList);
+		mRecyclerViewAdapter = new RecyclerViewAdapter(getActivity(),mCourseList);
 		mPullLoadMoreRecyclerView.setAdapter(mRecyclerViewAdapter);
 		mPullLoadMoreRecyclerView.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView
 				.PullLoadMoreListener() {
@@ -56,7 +65,7 @@ public class RegistrationFragment extends BaseFragment {
 			@Override
 			public void onRefresh() {
 				page = 1;
-				mDataList.clear();
+				mCourseList.clear();
 				Log.e("TAG", "onRefresh()");
 				setList();
 			}
@@ -92,9 +101,22 @@ public class RegistrationFragment extends BaseFragment {
 			@Override
 			public void run() {
 				int start = 20 * (page - 1);
-				for (int i = start; i < page * 20; i++) {
-					mDataList.add("线性代数" + i + "," + "教学楼A301" + i);
-				}
+				//for (int i = start; i < page * 20; i++) {
+				//	mDataList.add("线性代数" + i + "," + "教学楼A301" + i);
+				//}
+				registrationPresenter.getAddedCourse(HereApplication.currentUser, new IRegistrationPresenter
+						.OnGetAddedCourseListener() {
+
+					@Override
+					public void onGetAddedCourseSucceed() {
+
+					}
+
+					@Override
+					public void onGetAddedCourseFail() {
+
+					}
+				});
 				mRecyclerViewAdapter.notifyDataSetChanged();
 				mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
 			}
@@ -102,5 +124,4 @@ public class RegistrationFragment extends BaseFragment {
 		handler = new Handler();
 		handler.postDelayed(runnable, 500);
 	}
-
 }

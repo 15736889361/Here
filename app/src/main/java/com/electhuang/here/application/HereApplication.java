@@ -10,13 +10,15 @@ import com.avos.avoscloud.AVUser;
  */
 public class HereApplication extends Application {
 
-	public static String username;
+	public static AVUser currentUser;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		// 初始化参数依次为 this, AppId, AppKey
-		AVOSCloud.initialize(this,"m4YF1A318KwgIqHyQ5xSqLjO-gzGzoHsz","Achl6SJ4rOilcaoEHqGEWswb");
-		username = AVUser.getCurrentUser().getUsername();
+		AVOSCloud.initialize(this, "m4YF1A318KwgIqHyQ5xSqLjO-gzGzoHsz", "Achl6SJ4rOilcaoEHqGEWswb");
+		if (AVUser.getCurrentUser() != null) {
+			currentUser = AVUser.getCurrentUser();
+		}
 	}
 }

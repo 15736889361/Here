@@ -1,7 +1,8 @@
 package com.electhuang.here.presenter;
 
-import com.electhuang.here.model.IRegisterModel;
+import com.electhuang.here.model.imodelbind.IRegisterModel;
 import com.electhuang.here.model.RegisterModel;
+import com.electhuang.here.presenter.ipresenterbind.IRegisterPresenter;
 import com.electhuang.here.view.RegisterActivity;
 import com.electhuang.here.view.iviewbind.IRegisterActivity;
 

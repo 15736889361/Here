@@ -1,7 +1,8 @@
 package com.electhuang.here.model;
 
 import com.avos.avoscloud.AVUser;
-import com.electhuang.here.presenter.IMainPresenter;
+import com.electhuang.here.model.imodelbind.IMainModel;
+import com.electhuang.here.presenter.ipresenterbind.IMainPresenter;
 
 /**
  * Created by elecdog on 2016/11/29.

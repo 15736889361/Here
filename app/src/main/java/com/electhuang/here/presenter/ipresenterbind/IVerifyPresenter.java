@@ -1,4 +1,4 @@
-package com.electhuang.here.presenter;
+package com.electhuang.here.presenter.ipresenterbind;
 
 /**
  * Created by elecdog on 2016/11/27.

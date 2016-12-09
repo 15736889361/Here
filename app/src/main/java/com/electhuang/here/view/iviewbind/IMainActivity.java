@@ -1,6 +1,6 @@
 package com.electhuang.here.view.iviewbind;
 
-import com.electhuang.here.databeans.Course;
+import com.electhuang.here.beans.Course;
 
 import java.util.ArrayList;
 

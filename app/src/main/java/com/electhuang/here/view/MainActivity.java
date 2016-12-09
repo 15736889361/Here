@@ -15,21 +15,30 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.FindCallback;
+import com.avos.avoscloud.SaveCallback;
 import com.electhuang.here.R;
-import com.electhuang.here.databeans.Course;
-import com.electhuang.here.presenter.IMainPresenter;
+import com.electhuang.here.application.HereApplication;
+import com.electhuang.here.beans.Course;
 import com.electhuang.here.presenter.MainPresenter;
+import com.electhuang.here.presenter.ipresenterbind.IMainPresenter;
 import com.electhuang.here.view.iviewbind.IMainActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends BaseActivity
 		implements NavigationView.OnNavigationItemSelectedListener, IMainActivity {
 
 	private RegistrationFragment registrationFragment;
 	private FragmentManager fragmentManager;
-	private AddFragment addFragment;
+	private CourseManageFragment courseManageFragment;
 	private SettingFragment settingFragment;
 	private Fragment currentFragment;//标志内容区当前显示的Fragment
 
@@ -51,7 +60,7 @@ public class MainActivity extends BaseActivity
 	 */
 	private void initContent() {
 		registrationFragment = new RegistrationFragment();
-		addFragment = new AddFragment();
+		courseManageFragment = new CourseManageFragment();
 		settingFragment = new SettingFragment();
 		if (fragmentManager == null) {
 			fragmentManager = getSupportFragmentManager();
@@ -83,9 +92,9 @@ public class MainActivity extends BaseActivity
 						break;
 					case R.id.add:
 						if (registrationFragment == null) {
-							addFragment = new AddFragment();
+							courseManageFragment = new CourseManageFragment();
 						}
-						switchContent(addFragment);
+						switchContent(courseManageFragment);
 						toolbar.setTitle("添加签到");
 						break;
 					case R.id.setting:
@@ -181,6 +190,25 @@ public class MainActivity extends BaseActivity
 			startActivity(new Intent(MainActivity.this, LoginActivity.class));
 			finish();
 			return true;
+		} else if (id == R.id.action_add_course) {
+			AVQuery<AVObject> query = new AVQuery<>("Course");
+			query.whereEqualTo("course_name", "高等数学");
+			query.findInBackground(new FindCallback<AVObject>() {
+				@Override
+				public void done(List<AVObject> list, AVException e) {
+					String objectId = list.get(0).getObjectId();
+					List<AVUser> followers = list.get(0).getList("followers");
+					followers.add(HereApplication.currentUser);
+					AVObject course = AVObject.createWithoutData("Course", objectId);
+					course.put("followers", followers);
+					course.saveInBackground(new SaveCallback() {
+						@Override
+						public void done(AVException e1) {
+							Toast.makeText(MainActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+						}
+					});
+				}
+			});
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -205,9 +233,9 @@ public class MainActivity extends BaseActivity
 			toolbar.setTitle("这里签到·Here");
 		} else if (id == R.id.add) {
 			if (registrationFragment == null) {
-				addFragment = new AddFragment();
+				courseManageFragment = new CourseManageFragment();
 			}
-			switchContent(addFragment);
+			switchContent(courseManageFragment);
 			toolbar.setTitle("添加签到");
 		} else if (id == R.id.setting) {
 			if (registrationFragment == null) {

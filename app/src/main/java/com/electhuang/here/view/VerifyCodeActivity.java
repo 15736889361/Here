@@ -172,6 +172,7 @@ public class VerifyCodeActivity extends BaseActivity implements IVerifyCodeActiv
 				if (countDownTimer != null) {
 					if (myTimerTask != null) {
 						myTimerTask.cancel();
+						myTimerTask = null;
 					}
 				}
 			} else {

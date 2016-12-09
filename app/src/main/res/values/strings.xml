@@ -49,4 +49,5 @@
     <string name="week_saturday">Saturday</string>
     <string name="succeed">succeed</string>
     <string name="error">error</string>
+    <string name="add_course">Add course</string>
 </resources>

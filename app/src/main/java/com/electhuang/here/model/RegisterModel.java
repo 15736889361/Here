@@ -7,7 +7,8 @@ import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.RequestMobileCodeCallback;
 import com.avos.avoscloud.SignUpCallback;
-import com.electhuang.here.presenter.IRegisterPresenter;
+import com.electhuang.here.model.imodelbind.IRegisterModel;
+import com.electhuang.here.presenter.ipresenterbind.IRegisterPresenter;
 
 /**
  * Created by elecdog on 2016/11/27.

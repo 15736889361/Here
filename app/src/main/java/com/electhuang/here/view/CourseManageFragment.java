@@ -14,16 +14,16 @@ import com.electhuang.here.view.iviewbind.BaseFragment;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddFragment extends BaseFragment implements View.OnClickListener {
+public class CourseManageFragment extends BaseFragment implements View.OnClickListener {
 
-	public AddFragment() {
+	public CourseManageFragment() {
 
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_add, container, false);
+		View view = inflater.inflate(R.layout.fragment_course_manage, container, false);
 		CardView cardView_create = (CardView) view.findViewById(R.id.cardView_create);
 		CardView cardView_join = (CardView) view.findViewById(R.id.cardView_join);
 		cardView_create.setOnClickListener(this);

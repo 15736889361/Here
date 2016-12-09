@@ -1,7 +1,9 @@
 package com.electhuang.here.presenter;
 
+import com.electhuang.here.beans.Course;
 import com.electhuang.here.model.CreateCourseModel;
-import com.electhuang.here.model.ICreateCourseModel;
+import com.electhuang.here.model.imodelbind.ICreateCourseModel;
+import com.electhuang.here.presenter.ipresenterbind.ICreateCoursePresenter;
 
 /**
  * Created by elecdog on 2016/12/4.
@@ -12,11 +14,9 @@ public class CreateCoursePresenter implements ICreateCoursePresenter {
 	private ICreateCourseModel createCourseModel = new CreateCourseModel(this);
 
 	@Override
-	public void createCourse(String course_name, String classroom, String course_time, String course_date, String
-			description, boolean isRepeat, String creator, OnCreateCourseListener listener) {
+	public void createCourse(Course course, OnCreateCourseListener listener) {
 		this.listener = listener;
-		createCourseModel.createCourse(course_name, classroom, course_time, course_date, description, isRepeat,
-				creator);
+		createCourseModel.createCourse(course);
 	}
 
 	public void createCourseSucceed() {

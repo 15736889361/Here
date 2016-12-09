@@ -1,7 +1,8 @@
 package com.electhuang.here.presenter;
 
-import com.electhuang.here.model.ILoginModel;
+import com.electhuang.here.model.imodelbind.ILoginModel;
 import com.electhuang.here.model.LoginModel;
+import com.electhuang.here.presenter.ipresenterbind.ILoginPresenter;
 import com.electhuang.here.view.iviewbind.ILoginActivity;
 
 /**

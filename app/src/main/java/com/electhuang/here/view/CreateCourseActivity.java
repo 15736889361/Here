@@ -14,13 +14,17 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVUser;
 import com.electhuang.here.R;
 import com.electhuang.here.application.HereApplication;
+import com.electhuang.here.beans.Course;
 import com.electhuang.here.presenter.CreateCoursePresenter;
-import com.electhuang.here.presenter.ICreateCoursePresenter;
+import com.electhuang.here.presenter.ipresenterbind.ICreateCoursePresenter;
 import com.electhuang.here.view.iviewbind.ICreateCourseActivity;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class CreateCourseActivity extends BaseActivity implements ICreateCourseActivity, View.OnClickListener {
 
@@ -158,7 +162,7 @@ public class CreateCourseActivity extends BaseActivity implements ICreateCourseA
 				String course_time = tv_course_time.getText().toString().trim();
 				String course_date = tv_course_date.getText().toString().trim();
 				String description = et_description.getText().toString().trim();
-				String creator = HereApplication.username;
+				AVUser creator = HereApplication.currentUser;
 				boolean isRepeat;
 				if (rb_isRepeat.isChecked()) {
 					isRepeat = true;
@@ -179,8 +183,17 @@ public class CreateCourseActivity extends BaseActivity implements ICreateCourseA
 				if (cancel) {
 					focusView.requestFocus();
 				} else {
-					createCoursePresenter.createCourse(course_name, classroom, course_time, course_date, description,
-							isRepeat, creator, new ICreateCoursePresenter.OnCreateCourseListener() {
+					Course course = new Course();
+					course.setCourseName(course_name);
+					course.setCourse_time(course_time);
+					course.setCourse_data(course_date);
+					course.setClassroom(classroom);
+					course.setDescription(description);
+					course.setCreator(creator);
+					course.setRepeat(isRepeat);
+					List<AVUser> followers = new ArrayList<>();
+					course.setFollowers(followers);
+					createCoursePresenter.createCourse(course, new ICreateCoursePresenter.OnCreateCourseListener() {
 
 						@Override
 						public void onCreateCourseSuccess() {
