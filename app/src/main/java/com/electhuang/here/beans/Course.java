@@ -6,8 +6,6 @@ import com.avos.avoscloud.AVClassName;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
 
-import java.util.List;
-
 /**
  * Created by elecdog on 2016/12/9.
  */
@@ -25,30 +23,27 @@ public class Course extends AVObject {
 	}
 
 	public String getCourseName() {
-		return getString("course_name");
+		return getString("courseName");
 	}
 
 	public void setCourseName(String courseName) {
-		//this.courseName = courseName;
-		put("course_name", courseName);
+		put("courseName", courseName);
 	}
 
 	public String getCourse_time() {
-		return getString("course_time");
+		return getString("courseTime");
 	}
 
 	public void setCourse_time(String course_time) {
-		//this.course_time = course_time;
-		put("course_time", course_time);
+		put("courseTime", course_time);
 	}
 
 	public String getCourse_date() {
-		return getString("course_date");
+		return getString("courseDate");
 	}
 
 	public void setCourse_date(String course_date) {
-		//course_data = course_data;
-		put("course_date", course_date);
+		put("courseDate", course_date);
 	}
 
 	public String getClassroom() {
@@ -56,17 +51,15 @@ public class Course extends AVObject {
 	}
 
 	public void setClassroom(String classroom) {
-		//classroom = classroom;
 		put("classroom", classroom);
 	}
 
 	public String getDescription() {
-		return getString("description");
+		return getString("desc");
 	}
 
 	public void setDescription(String description) {
-		//description = description;
-		put("description", description);
+		put("desc", description);
 	}
 
 	public AVUser getCreator() {
@@ -74,17 +67,7 @@ public class Course extends AVObject {
 	}
 
 	public void setCreator(AVUser creator) {
-		//creator = creator;
 		put("creator", creator);
-	}
-
-	public List<AVUser> getFollowers() {
-		return getList("followers", AVUser.class);
-	}
-
-	public void setFollowers(List<AVUser> followers) {
-		//followers = followers;
-		put("followers", followers);
 	}
 
 	public boolean isRepeat() {
@@ -92,7 +75,6 @@ public class Course extends AVObject {
 	}
 
 	public void setRepeat(boolean repeat) {
-		//isRepeat = repeat;
 		put("isRepeat", repeat);
 	}
 }

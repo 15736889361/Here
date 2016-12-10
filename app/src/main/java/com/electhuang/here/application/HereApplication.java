@@ -1,6 +1,7 @@
 package com.electhuang.here.application;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
@@ -23,6 +24,7 @@ public class HereApplication extends Application {
 		AVOSCloud.initialize(this, "m4YF1A318KwgIqHyQ5xSqLjO-gzGzoHsz", "Achl6SJ4rOilcaoEHqGEWswb");
 		if (AVUser.getCurrentUser() != null) {
 			currentUser = AVUser.getCurrentUser();
+			Log.e("TAG", "currentUser:" + currentUser);
 		}
 	}
 }

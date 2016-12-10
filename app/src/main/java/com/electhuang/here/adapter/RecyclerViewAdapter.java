@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,13 +36,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 	@Override
 	public void onBindViewHolder(ViewHolder holder, int position) {
-		Log.e("TAG", "course:" + courseList.get(position));
-		String objectId = courseList.get(position).getObjectId();
-
 		holder.tv_title.setText(courseList.get(position).getCourseName());
 		holder.tv_reg_address.setText(courseList.get(position).getClassroom());
 		holder.tv_reg_time.setText(courseList.get(position).getCourse_time());
-		//holder.tv_creator.setText(courseList.get(position).getCreator().getUsername());
+		holder.tv_creator.setText(courseList.get(position).getCreator().getUsername());
 		holder.tv_description.setText(courseList.get(position).getDescription());
 	}
 

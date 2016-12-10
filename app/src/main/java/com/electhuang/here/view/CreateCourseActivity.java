@@ -22,9 +22,7 @@ import com.electhuang.here.presenter.CreateCoursePresenter;
 import com.electhuang.here.presenter.ipresenterbind.ICreateCoursePresenter;
 import com.electhuang.here.view.iviewbind.ICreateCourseActivity;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class CreateCourseActivity extends BaseActivity implements ICreateCourseActivity, View.OnClickListener {
 
@@ -191,8 +189,6 @@ public class CreateCourseActivity extends BaseActivity implements ICreateCourseA
 					course.setDescription(description);
 					course.setCreator(creator);
 					course.setRepeat(isRepeat);
-					List<AVUser> followers = new ArrayList<>();
-					course.setFollowers(followers);
 					createCoursePresenter.createCourse(course, new ICreateCoursePresenter.OnCreateCourseListener() {
 
 						@Override

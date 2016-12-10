@@ -53,18 +53,5 @@ public class RegisterModel implements IRegisterModel {
 				}
 			}
 		});
-		/*AVUser.signUpOrLoginByMobilePhoneInBackground(phoneNumber, username, new
-				LogInCallback<AVUser>() {
-			@Override
-			public void done(AVUser avUser, AVException e) {
-				if (e == null) {
-					Log.e("TAG", "注册成功");
-					avUser.setPassword(password);
-					avUser.setEmail("952137880@qq.com");
-				} else {
-					Log.e("TAG", e.toString());
-				}
-			}
-		});*/
 	}
 }

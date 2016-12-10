@@ -20,11 +20,11 @@ import android.widget.Toast;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.AVRelation;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.electhuang.here.R;
-import com.electhuang.here.application.HereApplication;
 import com.electhuang.here.beans.Course;
 import com.electhuang.here.presenter.MainPresenter;
 import com.electhuang.here.presenter.ipresenterbind.IMainPresenter;
@@ -189,24 +189,24 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 			return true;
 		} else if (id == R.id.action_add_course) {
 			AVQuery<AVObject> query = new AVQuery<>("Course");
-			query.whereEqualTo("course_name", "高等数学");
+			query.include("creator");
+			query.whereEqualTo("courseName", "高等数学");
 			query.findInBackground(new FindCallback<AVObject>() {
 				@Override
 				public void done(List<AVObject> list, AVException e) {
-					String objectId = HereApplication.currentUser.getObjectId();
+					//String objectId = HereApplication.currentUser.getObjectId();
 					//AVUser user = (AVUser) AVObject.createWithoutData("_User", objectId);
 					AVUser user = AVUser.getCurrentUser();
-					List<Course> courseList = user.getList("courseList", Course.class);
-					if (courseList == null) {
-						courseList = new ArrayList<Course>();
-					}
-					Course course = (Course) list.get(0);
-					courseList.add(course);
-					user.put("courseList", courseList);
+					AVRelation<AVObject> relation = user.getRelation("courses");
+					relation.add(list.get(0));
 					user.saveInBackground(new SaveCallback() {
 						@Override
 						public void done(AVException e) {
-							Toast.makeText(MainActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+							if (e == null) {
+								Toast.makeText(MainActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+							} else {
+								Toast.makeText(MainActivity.this, "添加失败", Toast.LENGTH_SHORT).show();
+							}
 						}
 					});
 				}
