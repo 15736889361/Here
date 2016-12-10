@@ -1,5 +1,7 @@
 package com.electhuang.here.presenter.ipresenterbind;
 
+import com.avos.avoscloud.AVUser;
+
 /**
  * Created by elecdog on 2016/11/27.
  */
@@ -24,11 +26,8 @@ public interface IRegisterPresenter {
 
 	/**
 	 * 注册
-	 * @param phoneNumber
-	 * @param password
-	 * @param username
 	 */
-	void register(String phoneNumber,String password,String username);
+	void register(AVUser user);
 
 	/**
 	 * 注册成功

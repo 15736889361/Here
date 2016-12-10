@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.electhuang.here.R;
 import com.electhuang.here.adapter.RecyclerViewAdapter;
@@ -97,31 +98,75 @@ public class RegistrationFragment extends BaseFragment implements IRegistrationF
 
 	private void setList() {
 		Log.e("TAG", "setList()");
-		Runnable runnable = new Runnable() {
+		List<Course> courseList = registrationPresenter.getAddedCourse(HereApplication.currentUser, new
+				IRegistrationPresenter.OnGetAddedCourseListener() {
+
+			@Override
+			public void onGetAddedCourseSucceed() {
+				getActivity().runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Toast.makeText(getActivity(), "列表刷新成功", Toast.LENGTH_SHORT).show();
+					}
+				});
+			}
+
+			@Override
+			public void onGetAddedCourseFail() {
+				getActivity().runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Toast.makeText(getActivity(), "获取数据失败，请查看网络连接", Toast.LENGTH_SHORT).show();
+					}
+				});
+			}
+		});
+		if (courseList != null) {
+			mCourseList.addAll(courseList);
+			Log.e("TAG", "courseList长度:" + mCourseList.size());
+			mRecyclerViewAdapter.notifyDataSetChanged();
+			mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
+		} else {
+			Log.e("TAG", "courseList长度:" + mCourseList.size());
+			mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
+		}
+
+		/*Runnable runnable = new Runnable() {
 			@Override
 			public void run() {
 				int start = 20 * (page - 1);
 				//for (int i = start; i < page * 20; i++) {
 				//	mDataList.add("线性代数" + i + "," + "教学楼A301" + i);
 				//}
-				registrationPresenter.getAddedCourse(HereApplication.currentUser, new IRegistrationPresenter
+				mCourseList = registrationPresenter.getAddedCourse(HereApplication.currentUser, new IRegistrationPresenter
 						.OnGetAddedCourseListener() {
 
 					@Override
 					public void onGetAddedCourseSucceed() {
-
+						getActivity().runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								Toast.makeText(getActivity(), "列表刷新成功", Toast.LENGTH_SHORT).show();
+							}
+						});
 					}
 
 					@Override
 					public void onGetAddedCourseFail() {
-
+						getActivity().runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								Toast.makeText(getActivity(), "获取数据失败，请查看网络连接", Toast.LENGTH_SHORT).show();
+							}
+						});
 					}
 				});
+				Log.e("TAG", "courseList长度:" + mCourseList.size());
 				mRecyclerViewAdapter.notifyDataSetChanged();
 				mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
 			}
 		};
 		handler = new Handler();
-		handler.postDelayed(runnable, 500);
+		handler.postDelayed(runnable, 500);*/
 	}
 }

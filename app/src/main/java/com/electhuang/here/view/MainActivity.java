@@ -33,8 +33,8 @@ import com.electhuang.here.view.iviewbind.IMainActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity
-		implements NavigationView.OnNavigationItemSelectedListener, IMainActivity {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener,
+		IMainActivity {
 
 	private RegistrationFragment registrationFragment;
 	private FragmentManager fragmentManager;
@@ -75,8 +75,7 @@ public class MainActivity extends BaseActivity
 	 * 初始化底部导航栏
 	 */
 	private void initBottomNavigationView() {
-		BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id
-				.bottomNavigationView);
+		BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
 		bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView
 				.OnNavigationItemSelectedListener() {
 
@@ -121,12 +120,10 @@ public class MainActivity extends BaseActivity
 				fragmentManager = getSupportFragmentManager();
 			}
 			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-			fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim
-					.fade_out);
+			fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
 			if (!fragment.isAdded()) {
 				//隐藏当前的fragment，add下一个到Activity中
-				fragmentTransaction.hide(currentFragment).add(R.id.contentLayout, fragment)
-						.commit();
+				fragmentTransaction.hide(currentFragment).add(R.id.contentLayout, fragment).commit();
 			} else {
 				fragmentTransaction.hide(currentFragment).show(fragment).commit();
 			}
@@ -143,8 +140,8 @@ public class MainActivity extends BaseActivity
 	public void initDrawer(Toolbar toolbar) {
 		DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		if (toolbar != null) {
-			ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-					toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+			ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string
+					.navigation_drawer_open, R.string.navigation_drawer_close) {
 				@Override
 				public void onDrawerOpened(View drawerView) {
 					super.onDrawerOpened(drawerView);
@@ -196,14 +193,19 @@ public class MainActivity extends BaseActivity
 			query.findInBackground(new FindCallback<AVObject>() {
 				@Override
 				public void done(List<AVObject> list, AVException e) {
-					String objectId = list.get(0).getObjectId();
-					List<AVUser> followers = list.get(0).getList("followers");
-					followers.add(HereApplication.currentUser);
-					AVObject course = AVObject.createWithoutData("Course", objectId);
-					course.put("followers", followers);
-					course.saveInBackground(new SaveCallback() {
+					String objectId = HereApplication.currentUser.getObjectId();
+					//AVUser user = (AVUser) AVObject.createWithoutData("_User", objectId);
+					AVUser user = AVUser.getCurrentUser();
+					List<Course> courseList = user.getList("courseList", Course.class);
+					if (courseList == null) {
+						courseList = new ArrayList<Course>();
+					}
+					Course course = (Course) list.get(0);
+					courseList.add(course);
+					user.put("courseList", courseList);
+					user.saveInBackground(new SaveCallback() {
 						@Override
-						public void done(AVException e1) {
+						public void done(AVException e) {
 							Toast.makeText(MainActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
 						}
 					});

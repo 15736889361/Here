@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVUser;
 import com.electhuang.here.R;
 import com.electhuang.here.presenter.RegisterPresenter;
 import com.electhuang.here.view.iviewbind.IRegisterActivity;
@@ -128,9 +129,15 @@ public class RegisterActivity extends BaseActivity implements IRegisterActivity,
 			focusView.requestFocus();
 		} else {
 			if (isPhoneNumber(phoneNumber)) {
+				AVUser user = new AVUser();
+				user.setUsername(username);
+				user.setPassword(password);
+				user.setMobilePhoneNumber(phoneNumber);
 				showProgress(true);
 				//phoneNumber = subPhoneNumber(phoneNumber);
-				registerPresenter.register(phoneNumber, password, username);
+				registerPresenter.register(user);
+			} else {
+				Toast.makeText(RegisterActivity.this, "手机号码不正确", Toast.LENGTH_SHORT).show();
 			}
 		}
 	}

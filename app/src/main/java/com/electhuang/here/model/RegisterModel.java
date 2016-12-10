@@ -37,11 +37,11 @@ public class RegisterModel implements IRegisterModel {
 	}
 
 	@Override
-	public void register(String phoneNumber, final String password, String username) {
-		AVUser user = new AVUser();
-		user.setUsername(username);
-		user.setPassword(password);
-		user.put("mobilePhoneNumber",phoneNumber);
+	public void register(AVUser user) {
+		//user.setUsername(user.getUsername());
+		//user.setPassword(user.getPassword());
+		//user.put("mobilePhoneNumber",user.getMobilePhoneNumber());
+		//user.put("courseList",user.getCourseList());
 		user.signUpInBackground(new SignUpCallback() {
 			public void done(AVException e) {
 				if (e == null) {

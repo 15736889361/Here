@@ -1,5 +1,9 @@
 package com.electhuang.here.beans;
 
+import android.os.Parcel;
+
+import com.avos.avoscloud.AVClassName;
+import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
 
 import java.util.List;
@@ -7,92 +11,88 @@ import java.util.List;
 /**
  * Created by elecdog on 2016/12/9.
  */
-public class Course {
+@AVClassName("Course")
+public class Course extends AVObject {
 
-	private String courseName;
-	private String course_time;
-	private String course_data;
-	private String classroom;
-	private String description;
-	private AVUser creator;
-	private List<AVUser> followers;
-	private boolean isRepeat;
+	public static final Creator CREATOR = AVObjectCreator.instance;
+
+	public Course() {
+
+	}
+
+	public Course(Parcel in) {
+		super(in);
+	}
 
 	public String getCourseName() {
-		return courseName;
+		return getString("course_name");
 	}
 
 	public void setCourseName(String courseName) {
-		this.courseName = courseName;
+		//this.courseName = courseName;
+		put("course_name", courseName);
 	}
 
 	public String getCourse_time() {
-		return course_time;
+		return getString("course_time");
 	}
 
 	public void setCourse_time(String course_time) {
-		this.course_time = course_time;
+		//this.course_time = course_time;
+		put("course_time", course_time);
 	}
 
-	public String getCourse_data() {
-		return course_data;
+	public String getCourse_date() {
+		return getString("course_date");
 	}
 
-	public void setCourse_data(String course_data) {
-		this.course_data = course_data;
+	public void setCourse_date(String course_date) {
+		//course_data = course_data;
+		put("course_date", course_date);
 	}
 
 	public String getClassroom() {
-		return classroom;
+		return getString("classroom");
 	}
 
 	public void setClassroom(String classroom) {
-		this.classroom = classroom;
+		//classroom = classroom;
+		put("classroom", classroom);
 	}
 
 	public String getDescription() {
-		return description;
+		return getString("description");
 	}
 
 	public void setDescription(String description) {
-		this.description = description;
+		//description = description;
+		put("description", description);
 	}
 
 	public AVUser getCreator() {
-		return creator;
+		return getAVUser("creator", AVUser.class);
 	}
 
 	public void setCreator(AVUser creator) {
-		this.creator = creator;
+		//creator = creator;
+		put("creator", creator);
 	}
 
 	public List<AVUser> getFollowers() {
-		return followers;
+		return getList("followers", AVUser.class);
 	}
 
 	public void setFollowers(List<AVUser> followers) {
-		this.followers = followers;
+		//followers = followers;
+		put("followers", followers);
 	}
 
 	public boolean isRepeat() {
-		return isRepeat;
+		return getBoolean("isRepeat");
 	}
 
 	public void setRepeat(boolean repeat) {
-		isRepeat = repeat;
-	}
-
-	@Override
-	public String toString() {
-		return "Course{" +
-				"courseName='" + courseName + '\'' +
-				", course_time='" + course_time + '\'' +
-				", course_data='" + course_data + '\'' +
-				", classroom='" + classroom + '\'' +
-				", description='" + description + '\'' +
-				", creator=" + creator +
-				", followers=" + followers +
-				", isRepeat=" + isRepeat +
-				'}';
+		//isRepeat = repeat;
+		put("isRepeat", repeat);
 	}
 }

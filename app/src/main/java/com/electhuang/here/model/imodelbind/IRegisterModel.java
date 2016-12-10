@@ -1,5 +1,7 @@
 package com.electhuang.here.model.imodelbind;
 
+import com.avos.avoscloud.AVUser;
+
 /**
  * Created by elecdog on 2016/11/27.
  */
@@ -14,10 +16,6 @@ public interface IRegisterModel {
 
 	/**
 	 * 注册一个用户
-	 *
-	 * @param phoneNumber
-	 * @param password
-	 * @param username
 	 */
-	void register(String phoneNumber, String password, String username);
+	void register(AVUser user);
 }

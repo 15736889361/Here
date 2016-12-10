@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +24,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 	private List<Course> courseList;
 	private Activity mActivity;
 
-	public RecyclerViewAdapter(Activity activity, List<Course> dataList) {
-		this.courseList = dataList;
+	public RecyclerViewAdapter(Activity activity, List<Course> courseList) {
+		this.courseList = courseList;
 		mActivity = activity;
 	}
 
@@ -36,8 +37,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 	@Override
 	public void onBindViewHolder(ViewHolder holder, int position) {
-		//holder.tv_title.setText(dataList.get(position).split(",")[0]);
-		//holder.tv_reg_address.setText(dataList.get(position).split(",")[1]);
+		Log.e("TAG", "course:" + courseList.get(position));
+		String objectId = courseList.get(position).getObjectId();
+
+		holder.tv_title.setText(courseList.get(position).getCourseName());
+		holder.tv_reg_address.setText(courseList.get(position).getClassroom());
+		holder.tv_reg_time.setText(courseList.get(position).getCourse_time());
+		//holder.tv_creator.setText(courseList.get(position).getCreator().getUsername());
+		holder.tv_description.setText(courseList.get(position).getDescription());
 	}
 
 	@Override
@@ -57,12 +64,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 			tv_creator = (TextView) itemView.findViewById(R.id.tv_creator);
 			tv_description = (TextView) itemView.findViewById(R.id.tv_description);
 
-			final String title = tv_title.getText().toString().trim();
-			final String reg_time = tv_reg_time.getText().toString().trim();
-			String reg_address = tv_reg_address.getText().toString().trim();
-			String creator_name = tv_creator.getText().toString().trim();
-			String description = tv_description.getText().toString().trim();
-
 			//给CardView添加点击监听
 			itemView.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -70,9 +71,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 					DetailActivity.startActivity(mActivity, getLayoutPosition());
 					Intent intent = new Intent(mActivity, DetailActivity.class);
 					Bundle bundle = new Bundle();
-					Course course = new Course();
-					course.setCourseName(title);
-					course.setCourse_time(reg_time);
+					//Course course = new Course();
+					//course.setCourseName(title);
+					//course.setCourse_time(reg_time);
 					//bundle.putSerializable("course", ); mActivity.startActivity(intent);
 				}
 			});

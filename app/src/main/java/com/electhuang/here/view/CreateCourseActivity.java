@@ -186,7 +186,7 @@ public class CreateCourseActivity extends BaseActivity implements ICreateCourseA
 					Course course = new Course();
 					course.setCourseName(course_name);
 					course.setCourse_time(course_time);
-					course.setCourse_data(course_date);
+					course.setCourse_date(course_date);
 					course.setClassroom(classroom);
 					course.setDescription(description);
 					course.setCreator(creator);
