@@ -50,4 +50,5 @@
     <string name="succeed">succeed</string>
     <string name="error">error</string>
     <string name="add_course">Add course</string>
+    <string name="empty_course">you have not added course</string>
 </resources>

@@ -27,7 +27,7 @@
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
-        android:id="@+id/cardView_join"
+        android:id="@+id/cardView_manage"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_marginBottom="@dimen/card_view_margin_bottom"
@@ -43,6 +43,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="我的课程"/>
+            android:text="课程管理"/>
     </android.support.v7.widget.CardView>
 </LinearLayout>

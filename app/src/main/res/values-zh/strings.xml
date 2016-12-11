@@ -49,4 +49,5 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="add_course">添加课程</string>
+    <string name="empty_course">你的签到任务空空如也</string>
 </resources>

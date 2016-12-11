@@ -25,9 +25,9 @@ public class CourseManageFragment extends BaseFragment implements View.OnClickLi
 	                         Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_course_manage, container, false);
 		CardView cardView_create = (CardView) view.findViewById(R.id.cardView_create);
-		CardView cardView_join = (CardView) view.findViewById(R.id.cardView_join);
+		CardView cardView_manage = (CardView) view.findViewById(R.id.cardView_manage);
 		cardView_create.setOnClickListener(this);
-		cardView_join.setOnClickListener(this);
+		cardView_manage.setOnClickListener(this);
 		return view;
 	}
 
@@ -38,7 +38,7 @@ public class CourseManageFragment extends BaseFragment implements View.OnClickLi
 				Intent intent = new Intent(getActivity(), CreateCourseActivity.class);
 				startActivity(intent);
 				break;
-			case R.id.cardView_join:
+			case R.id.cardView_manage:
 				break;
 		}
 	}
