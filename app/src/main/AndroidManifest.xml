@@ -48,6 +48,8 @@
         </activity>
         <activity android:name=".view.iviewbind.ManageCourseActivity">
         </activity>
+        <activity android:name=".view.AddCourseActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -11,8 +11,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -25,12 +25,10 @@ import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.electhuang.here.R;
-import com.electhuang.here.beans.Course;
 import com.electhuang.here.presenter.MainPresenter;
 import com.electhuang.here.presenter.ipresenterbind.IMainPresenter;
 import com.electhuang.here.view.iviewbind.IMainActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener,
@@ -41,18 +39,83 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 	private CourseManageFragment courseManageFragment;
 	private SettingFragment settingFragment;
 	private Fragment currentFragment;//标志内容区当前显示的Fragment
-
 	private IMainPresenter mainPresenter = new MainPresenter(this);
 	private Toolbar toolbar;
+	private final int ADD_SUCCEED = 11;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		toolbar = initToolbar("这里签到·Here");
+		toolbar = (Toolbar) findViewById(R.id.toolbar);
+		toolbar.setTitle("这里签到·Here");
+		inflateMenu();
 		initDrawer(toolbar);
+		initSearchView();
 		initBottomNavigationView();
 		initContent();
+	}
+
+	private void inflateMenu() {
+		toolbar.inflateMenu(R.menu.main);
+		toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				switch (item.getItemId()) {
+					case R.id.action_logout:
+						mainPresenter.logout();
+						startActivity(new Intent(MainActivity.this, LoginActivity.class));
+						finish();
+						break;
+					case R.id.action_add_course:
+						AVQuery<AVObject> query = new AVQuery<>("Course");
+						query.include("creator");
+						query.whereEqualTo("courseName", "高等数学");
+						query.findInBackground(new FindCallback<AVObject>() {
+							@Override
+							public void done(List<AVObject> list, AVException e) {
+								//String objectId = HereApplication.currentUser.getObjectId();
+								//AVUser user = (AVUser) AVObject.createWithoutData("_User", objectId);
+								AVUser user = AVUser.getCurrentUser();
+								AVRelation<AVObject> relation = user.getRelation("courses");
+								relation.add(list.get(0));
+								user.saveInBackground(new SaveCallback() {
+									@Override
+									public void done(AVException e) {
+										if (e == null) {
+											Toast.makeText(MainActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+										} else {
+											Toast.makeText(MainActivity.this, "添加失败", Toast.LENGTH_SHORT).show();
+										}
+									}
+								});
+							}
+						});
+						break;
+				}
+				return true;
+			}
+		});
+	}
+
+	private void initSearchView() {
+		MenuItem menuItem = toolbar.getMenu().findItem(R.id.menu_search);
+		SearchView searchView = (SearchView) menuItem.getActionView();
+		searchView.setQueryHint("搜索教师来加入TA的课程...");
+		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				Intent intent = new Intent(getApplicationContext(), AddCourseActivity.class);
+				intent.putExtra("creator", query);
+				startActivityForResult(intent, ADD_SUCCEED);
+				return false;
+			}
+
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				return false;
+			}
+		});
 	}
 
 	/**
@@ -170,51 +233,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 		}
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-
-		//noinspection SimplifiableIfStatement
-		if (id == R.id.action_logout) {
-			mainPresenter.logout();
-			startActivity(new Intent(MainActivity.this, LoginActivity.class));
-			finish();
-			return true;
-		} else if (id == R.id.action_add_course) {
-			AVQuery<AVObject> query = new AVQuery<>("Course");
-			query.include("creator");
-			query.whereEqualTo("courseName", "高等数学");
-			query.findInBackground(new FindCallback<AVObject>() {
-				@Override
-				public void done(List<AVObject> list, AVException e) {
-					//String objectId = HereApplication.currentUser.getObjectId();
-					//AVUser user = (AVUser) AVObject.createWithoutData("_User", objectId);
-					AVUser user = AVUser.getCurrentUser();
-					AVRelation<AVObject> relation = user.getRelation("courses");
-					relation.add(list.get(0));
-					user.saveInBackground(new SaveCallback() {
-						@Override
-						public void done(AVException e) {
-							if (e == null) {
-								Toast.makeText(MainActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
-							} else {
-								Toast.makeText(MainActivity.this, "添加失败", Toast.LENGTH_SHORT).show();
-							}
-						}
-					});
-				}
-			});
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
 	/**
 	 * 抽屉的点击监听
 	 *
@@ -254,20 +272,5 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 		DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawer.closeDrawer(GravityCompat.START);
 		return true;
-	}
-
-	@Override
-	public void loadData() {
-
-	}
-
-	@Override
-	public void loadDataSuccess(ArrayList<Course> courseList) {
-
-	}
-
-	@Override
-	public void loadDataFail(String errCode, String errMsg) {
-
 	}
 }

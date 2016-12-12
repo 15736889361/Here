@@ -18,19 +18,20 @@ import java.util.List;
 /**
  * Created by elecdog on 2016/11/20.
  */
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class RegistrationFragmentRecyclerViewAdapter extends RecyclerView
+		.Adapter<RegistrationFragmentRecyclerViewAdapter.ViewHolder> {
 
 	private List<Course> courseList;
 	private Activity mActivity;
 
-	public RecyclerViewAdapter(Activity activity, List<Course> courseList) {
+	public RegistrationFragmentRecyclerViewAdapter(Activity activity, List<Course> courseList) {
 		this.courseList = courseList;
 		mActivity = activity;
 	}
 
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item, parent, false);
+		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.reg_recyclerview_item, parent, false);
 		return new ViewHolder(view);
 	}
 
@@ -39,6 +40,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 		holder.tv_title.setText(courseList.get(position).getCourseName());
 		holder.tv_reg_address.setText(courseList.get(position).getClassroom());
 		holder.tv_reg_time.setText(courseList.get(position).getCourse_time());
+		holder.tv_reg_date.setText(courseList.get(position).getCourse_date());
 		holder.tv_creator.setText(courseList.get(position).getCreator().getUsername());
 		holder.tv_description.setText(courseList.get(position).getDescription());
 	}
@@ -51,14 +53,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 	public class ViewHolder extends RecyclerView.ViewHolder {
 
 		private final TextView tv_title, tv_reg_time, tv_reg_address, tv_creator, tv_description;
+		private final TextView tv_reg_date;
 
 		public ViewHolder(View itemView) {
 			super(itemView);
 			tv_title = (TextView) itemView.findViewById(R.id.tv_title);
 			tv_reg_time = (TextView) itemView.findViewById(R.id.tv_reg_time);
-			tv_reg_address = (TextView) itemView.findViewById(R.id.tv_reg_address);
+			tv_reg_address = (TextView) itemView.
+					findViewById(R.id.tv_reg_address);
 			tv_creator = (TextView) itemView.findViewById(R.id.tv_creator);
 			tv_description = (TextView) itemView.findViewById(R.id.tv_description);
+			tv_reg_date = (TextView) itemView.findViewById(R.id.tv_reg_date);
 
 			//给CardView添加点击监听
 			itemView.setOnClickListener(new View.OnClickListener() {

@@ -2,7 +2,6 @@ package com.electhuang.here.view;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.electhuang.here.R;
-import com.electhuang.here.adapter.RecyclerViewAdapter;
+import com.electhuang.here.adapter.RegistrationFragmentRecyclerViewAdapter;
 import com.electhuang.here.application.HereApplication;
 import com.electhuang.here.beans.Course;
 import com.electhuang.here.presenter.RegistrationPresenter;
@@ -31,8 +30,7 @@ public class RegistrationFragment extends BaseFragment implements IRegistrationF
 	private PullLoadMoreRecyclerView mPullLoadMoreRecyclerView;
 	private List<Course> mCourseList = new ArrayList<Course>();
 	private int page = 1;
-	private Handler handler;
-	private RecyclerViewAdapter mRecyclerViewAdapter;
+	private RegistrationFragmentRecyclerViewAdapter mRecyclerViewAdapter;
 	private IRegistrationPresenter registrationPresenter = new RegistrationPresenter();
 
 	@Override
@@ -56,7 +54,7 @@ public class RegistrationFragment extends BaseFragment implements IRegistrationF
 		mPullLoadMoreRecyclerView.setLinearLayout();
 		mPullLoadMoreRecyclerView.setRefreshing(true);
 		mPullLoadMoreRecyclerView.setFooterViewText("loading");
-		mRecyclerViewAdapter = new RecyclerViewAdapter(getActivity(), mCourseList);
+		mRecyclerViewAdapter = new RegistrationFragmentRecyclerViewAdapter(getActivity(), mCourseList);
 		mPullLoadMoreRecyclerView.setAdapter(mRecyclerViewAdapter);
 		mPullLoadMoreRecyclerView.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
 
