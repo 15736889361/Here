@@ -8,6 +8,7 @@
     tools:context=".view.AddCourseActivity">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
@@ -18,7 +19,8 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/bar">
 
         <TextView
             android:id="@+id/empty_course"

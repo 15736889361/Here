@@ -2,7 +2,6 @@ package com.electhuang.here.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +22,7 @@ public class RegistrationFragmentRecyclerViewAdapter extends RecyclerView
 
 	private List<Course> courseList;
 	private Activity mActivity;
+	private final int ADD_SUCCEED = 11;
 
 	public RegistrationFragmentRecyclerViewAdapter(Activity activity, List<Course> courseList) {
 		this.courseList = courseList;
@@ -69,13 +69,11 @@ public class RegistrationFragmentRecyclerViewAdapter extends RecyclerView
 			itemView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					DetailActivity.startActivity(mActivity, getLayoutPosition());
+					Course currentCourse = courseList.get(getLayoutPosition());
+					String serializedString = currentCourse.toString();
 					Intent intent = new Intent(mActivity, DetailActivity.class);
-					Bundle bundle = new Bundle();
-					//Course course = new Course();
-					//course.setCourseName(title);
-					//course.setCourse_time(reg_time);
-					//bundle.putSerializable("course", ); mActivity.startActivity(intent);
+					intent.putExtra("currentCourse", serializedString);
+					mActivity.startActivityForResult(intent, ADD_SUCCEED);
 				}
 			});
 

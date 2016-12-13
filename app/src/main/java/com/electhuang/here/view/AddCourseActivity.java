@@ -1,6 +1,7 @@
 package com.electhuang.here.view;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.electhuang.here.R;
 import com.electhuang.here.adapter.AddCourseActivityRecyclerViewAdapter;
@@ -18,23 +19,24 @@ public class AddCourseActivity extends BaseActivity implements IAddCourseActivit
 	private List<Course> mCourseList = new ArrayList<Course>();
 	private IAddCoursePresenter addCoursePresenter = new AddCoursePresenter();
 	private String creator;
+	private AddCourseActivityRecyclerViewAdapter mRecyclerViewAdapter;
+	private PullLoadMoreRecyclerView pullLoadMoreRecyclerView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_course);
 		creator = getIntent().getStringExtra("creator");
+		initToolbar("课程搜索");
 		initView();
 	}
 
 	private void initView() {
-		PullLoadMoreRecyclerView pullLoadMoreRecyclerView = (PullLoadMoreRecyclerView) findViewById(R.id
-				.pullLoadMoreRecyclerView);
+		pullLoadMoreRecyclerView = (PullLoadMoreRecyclerView) findViewById(R.id.pullLoadMoreRecyclerView);
 		pullLoadMoreRecyclerView.setLinearLayout();
-		pullLoadMoreRecyclerView.setRefreshing(true);
+		pullLoadMoreRecyclerView.setRefreshing(false);
 		pullLoadMoreRecyclerView.setFooterViewText("loading");
-		AddCourseActivityRecyclerViewAdapter mRecyclerViewAdapter = new AddCourseActivityRecyclerViewAdapter(this,
-				mCourseList);
+		mRecyclerViewAdapter = new AddCourseActivityRecyclerViewAdapter(this, mCourseList);
 		pullLoadMoreRecyclerView.setAdapter(mRecyclerViewAdapter);
 		pullLoadMoreRecyclerView.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
 			@Override
@@ -54,7 +56,16 @@ public class AddCourseActivity extends BaseActivity implements IAddCourseActivit
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				addCoursePresenter.queryCourseByCreator(creator);
+				List<Course> courseList = addCoursePresenter.queryCourseByCreator(creator);
+				mCourseList.addAll(courseList);
+				Log.e("TAG", "courseList长度:" + mCourseList.size());
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						mRecyclerViewAdapter.notifyDataSetChanged();
+						pullLoadMoreRecyclerView.setPullLoadMoreCompleted();
+					}
+				});
 			}
 		}).start();
 	}

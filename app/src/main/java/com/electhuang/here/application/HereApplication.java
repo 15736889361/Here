@@ -8,12 +8,16 @@ import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
 import com.electhuang.here.beans.Course;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by elecdog on 2016/11/26.
  */
 public class HereApplication extends Application {
 
 	public static AVUser currentUser;
+	public static List<Course> addedCourseList = new ArrayList<Course>();
 
 	@Override
 	public void onCreate() {

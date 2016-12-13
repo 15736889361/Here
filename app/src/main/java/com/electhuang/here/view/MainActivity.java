@@ -1,5 +1,6 @@
 package com.electhuang.here.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
@@ -70,7 +72,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 					case R.id.action_add_course:
 						AVQuery<AVObject> query = new AVQuery<>("Course");
 						query.include("creator");
-						query.whereEqualTo("courseName", "高等数学");
+						query.whereEqualTo("courseName", "线性代数");
 						query.findInBackground(new FindCallback<AVObject>() {
 							@Override
 							public void done(List<AVObject> list, AVException e) {
@@ -105,10 +107,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
 			public boolean onQueryTextSubmit(String query) {
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				if (imm != null) {
+					imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+				}
 				Intent intent = new Intent(getApplicationContext(), AddCourseActivity.class);
 				intent.putExtra("creator", query);
-				startActivityForResult(intent, ADD_SUCCEED);
-				return false;
+				startActivity(intent);
+				return true;
 			}
 
 			@Override

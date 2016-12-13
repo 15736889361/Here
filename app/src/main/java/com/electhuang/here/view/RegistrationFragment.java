@@ -2,6 +2,7 @@ package com.electhuang.here.view;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -130,5 +131,16 @@ public class RegistrationFragment extends BaseFragment implements IRegistrationF
 				});
 			}
 		}).start();
+		new Handler().postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				getActivity().runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
+					}
+				});
+			}
+		}, 5000);
 	}
 }

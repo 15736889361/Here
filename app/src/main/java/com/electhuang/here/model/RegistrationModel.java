@@ -5,6 +5,7 @@ import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVRelation;
 import com.avos.avoscloud.AVUser;
+import com.electhuang.here.application.HereApplication;
 import com.electhuang.here.beans.Course;
 import com.electhuang.here.model.imodelbind.IRegistrationModel;
 import com.electhuang.here.presenter.RegistrationPresenter;
@@ -36,11 +37,12 @@ public class RegistrationModel implements IRegistrationModel {
 			registrationPresenter.getAddedCourseSucceed();
 			for (AVObject course : list) {
 				courseList.add((Course) course);
+				HereApplication.addedCourseList.add((Course) course);
 			}
+			return courseList;
 		} catch (AVException e) {
 			registrationPresenter.getAddedCourseFail();
-			e.printStackTrace();
+			return courseList;
 		}
-		return courseList;
 	}
 }
