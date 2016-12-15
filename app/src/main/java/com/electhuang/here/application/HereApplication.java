@@ -6,6 +6,7 @@ import android.util.Log;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
+import com.baidu.mapapi.SDKInitializer;
 import com.electhuang.here.beans.Course;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class HereApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		SDKInitializer.initialize(this);
 		//子类化Course
 		AVObject.registerSubclass(Course.class);
 		// 初始化参数依次为 this, AppId, AppKey
