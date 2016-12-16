@@ -23,7 +23,7 @@ public class HereApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		SDKInitializer.initialize(this);
+		SDKInitializer.initialize(getApplicationContext());
 		//子类化Course
 		AVObject.registerSubclass(Course.class);
 		// 初始化参数依次为 this, AppId, AppKey
