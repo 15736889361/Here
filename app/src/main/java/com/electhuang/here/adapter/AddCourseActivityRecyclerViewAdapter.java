@@ -1,16 +1,16 @@
 package com.electhuang.here.adapter;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.electhuang.here.R;
 import com.electhuang.here.beans.Course;
-import com.electhuang.here.view.DetailActivity;
+import com.electhuang.here.view.dialog.InfoDialog;
 
 import java.util.List;
 
@@ -71,9 +71,12 @@ public class AddCourseActivityRecyclerViewAdapter extends RecyclerView.Adapter<A
 				public void onClick(View view) {
 					Course currentCourse = courseList.get(getLayoutPosition());
 					String serializedString = currentCourse.toString();
-					Intent intent = new Intent(mActivity, DetailActivity.class);
-					intent.putExtra("currentCourse", serializedString);
-					mActivity.startActivityForResult(intent, ADD_SUCCEED);
+					new InfoDialog(mActivity, serializedString, false, new InfoDialog.OnInfoDialogListener() {
+						@Override
+						public void click() {
+							Toast.makeText(mActivity, "加入", Toast.LENGTH_SHORT).show();
+						}
+					}).show();
 				}
 			});
 
