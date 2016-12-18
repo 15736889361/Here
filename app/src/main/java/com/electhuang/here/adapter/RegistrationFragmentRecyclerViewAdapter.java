@@ -1,15 +1,16 @@
 package com.electhuang.here.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.electhuang.here.R;
 import com.electhuang.here.beans.Course;
+import com.electhuang.here.view.DetailActivity;
 import com.electhuang.here.view.dialog.InfoDialog;
 
 import java.util.List;
@@ -74,14 +75,11 @@ public class RegistrationFragmentRecyclerViewAdapter extends RecyclerView
 					new InfoDialog(mActivity, serializedString, true, new InfoDialog.OnInfoDialogListener() {
 						@Override
 						public void click() {
-							Toast.makeText(mActivity, "签到", Toast.LENGTH_SHORT).show();
+							//Toast.makeText(mActivity, "签到", Toast.LENGTH_SHORT).show();
+							Intent intent = new Intent(mActivity, DetailActivity.class);
+							mActivity.startActivity(intent);
 						}
 					}).show();
-					/*Course currentCourse = courseList.get(getLayoutPosition());
-					String serializedString = currentCourse.toString();
-					Intent intent = new Intent(mActivity, DetailActivity.class);
-					intent.putExtra("currentCourse", serializedString);
-					mActivity.startActivityForResult(intent, ADD_SUCCEED);*/
 				}
 			});
 

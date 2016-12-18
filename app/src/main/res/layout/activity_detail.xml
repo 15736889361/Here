@@ -17,106 +17,10 @@
         <include layout="@layout/toolbar"/>
     </android.support.design.widget.AppBarLayout>
 
-    <TextView
-        android:id="@+id/tv_course_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="15dp"
-        android:text="CourseName"
-        android:textSize="@dimen/title_font_size"/>
-
-    <LinearLayout
-        style="@style/group_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Teacher:"/>
-
-        <TextView
-            android:id="@+id/tv_creator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Teacher"/>
-    </LinearLayout>
-
-    <LinearLayout
-        style="@style/group_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Classroom:"/>
-
-        <TextView
-            android:id="@+id/tv_classroom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Classroom"/>
-    </LinearLayout>
-
-    <LinearLayout
-        style="@style/group_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/course_time"
-            android:textSize="@dimen/default_font_size"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_course_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="XX:XX"
-                android:textSize="@dimen/default_font_size"/>
-
-            <TextView
-                android:id="@+id/tv_course_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="XX月XX日XX年"
-                android:textSize="@dimen/default_font_size"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        style="@style/group_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/description"
-            android:textSize="@dimen/default_font_size"/>
-
-        <TextView
-            android:id="@+id/tv_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:singleLine="false"
-            android:text="无"/>
-    </LinearLayout>
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3">
+        android:layout_weight="2">
 
         <com.baidu.mapapi.map.MapView
             android:id="@+id/map_view"
@@ -133,23 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_weight="1">
+        android:layout_weight="2">
 
-        <Button
-            android:id="@+id/btn_reg"
-            style="@style/group_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="签到"/>
-
-        <Button
-            android:id="@+id/btn_add"
-            style="@style/group_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="加入"
-            android:visibility="gone"/>
     </RelativeLayout>
 </LinearLayout>

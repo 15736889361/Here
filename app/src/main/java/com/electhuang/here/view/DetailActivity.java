@@ -1,23 +1,27 @@
 package com.electhuang.here.view;
 
-import android.content.Intent;
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.widget.Toast;
 
 import com.baidu.location.LocationClient;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapView;
 import com.electhuang.here.R;
-import com.electhuang.here.application.HereApplication;
-import com.electhuang.here.beans.Course;
 import com.electhuang.here.utils.LocationUtil;
+
+import java.util.ArrayList;
 
 public class DetailActivity extends BaseActivity {
 
-	private Course course;
-	private boolean isAdded = false;
+	private static final int SDK_PERMISSION_REQUEST = 100;
 	private MapView mapView = null;
 	private BaiduMap baiduMap;
 	private LocationClient locationClient;
@@ -26,57 +30,17 @@ public class DetailActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_detail);
-		initToolbar("详细信息");
-		Intent intent = getIntent();
-		String currentCourse = intent.getStringExtra("currentCourse");
-		try {
-			course = (Course) Course.parseAVObject(currentCourse);
-			//Log.e("TAG", "avObject" + avObject);
-			for (Course course_ : HereApplication.addedCourseList) {
-				if (course_.getObjectId().equals(course.getObjectId())) {
-					isAdded = true;
-					break;
-				}
-			}
-			initView();
-		} catch (Exception e) {
-			e.printStackTrace();
+		initToolbar("签到验证");
+		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		if (!locManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			Toast.makeText(DetailActivity.this, "未打开GPS开关，可能导致定位失败或定位不准", Toast.LENGTH_SHORT).show();
 		}
+		getPermissions();
 	}
 
 	private void initView() {
-		TextView tv_course_name = (TextView) findViewById(R.id.tv_course_name);
-		TextView tv_creator = (TextView) findViewById(R.id.tv_creator);
-		TextView tv_classroom = (TextView) findViewById(R.id.tv_classroom);
-		TextView tv_course_time = (TextView) findViewById(R.id.tv_course_time);
-		TextView tv_course_date = (TextView) findViewById(R.id.tv_course_date);
-		TextView tv_description = (TextView) findViewById(R.id.tv_description);
-		Button btn_reg = (Button) findViewById(R.id.btn_reg);
-		Button btn_add = (Button) findViewById(R.id.btn_add);
 		mapView = (MapView) findViewById(R.id.map_view);
 		baiduMap = mapView.getMap();
-
-		String courseName = course.getCourseName();
-		String classroom = course.getClassroom();
-		String course_time = course.getCourse_time();
-		String course_date = course.getCourse_date();
-		String description = course.getDescription();
-		String creator = course.getCreator().getUsername();
-
-		tv_course_name.setText(courseName);
-		tv_creator.setText(creator);
-		tv_classroom.setText(classroom);
-		tv_course_time.setText(course_time);
-		tv_course_date.setText(course_date);
-		tv_description.setText(description);
-		if (!isAdded) {
-			btn_reg.setVisibility(View.GONE);
-			btn_add.setVisibility(View.VISIBLE);
-		} else {
-			btn_add.setVisibility(View.GONE);
-			btn_reg.setVisibility(View.VISIBLE);
-		}
-
 		initLocation();
 	}
 
@@ -117,5 +81,71 @@ public class DetailActivity extends BaseActivity {
 	protected void onPause() {
 		super.onPause();
 		mapView.onPause();
+	}
+
+	/**
+	 * 根据Android版本动态获取权限，6.0以上需要动态获取权限
+	 */
+	private void getPermissions() {
+		if (Build.VERSION.SDK_INT >= 23) {
+			ArrayList<String> permissions = new ArrayList<String>();
+			int checkCoarsePermission = ContextCompat.checkSelfPermission(this, Manifest.permission
+					.ACCESS_COARSE_LOCATION);
+			int checkFinePermission = ContextCompat.checkSelfPermission(this, Manifest.permission
+					.ACCESS_FINE_LOCATION);
+			/*
+			 * 定位必须权限
+			 */
+			if (checkCoarsePermission != PackageManager.PERMISSION_GRANTED) {
+				permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+			}
+			if (checkFinePermission != PackageManager.PERMISSION_GRANTED) {
+				permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+			}
+			/*
+			 * 读写权限，定位非必要
+			 */
+			addPermission(permissions, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+			addPermission(permissions, Manifest.permission.READ_EXTERNAL_STORAGE);
+			addPermission(permissions, Manifest.permission.READ_PHONE_STATE);
+			if (permissions.size() > 0) {
+				ActivityCompat.requestPermissions(this, permissions.toArray(new String[permissions.size()]),
+						SDK_PERMISSION_REQUEST);
+			} else {
+				initView();
+			}
+		} else {
+			initView();
+		}
+	}
+
+	@TargetApi(23)
+	private boolean addPermission(ArrayList<String> permissionsList, String permission) {
+		if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) { // 如果应用没有获得对应权限,则添加到列表中,准备批量申请
+			if (shouldShowRequestPermissionRationale(permission)) {
+				return true;
+			} else {
+				permissionsList.add(permission);
+				return false;
+			}
+		} else {
+			return true;
+		}
+	}
+
+	@TargetApi(23)
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		switch (requestCode) {
+			case SDK_PERMISSION_REQUEST:
+				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					initView();
+				} else {
+					Toast.makeText(this, "获取权限失败，无法定位成功", Toast.LENGTH_SHORT).show();
+				}
+				break;
+			default:
+				super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		}
 	}
 }
