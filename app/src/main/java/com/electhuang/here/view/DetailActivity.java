@@ -1,14 +1,8 @@
 package com.electhuang.here.view;
 
-import android.Manifest;
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
 import com.baidu.location.LocationClient;
@@ -17,11 +11,9 @@ import com.baidu.mapapi.map.MapView;
 import com.electhuang.here.R;
 import com.electhuang.here.utils.LocationUtil;
 
-import java.util.ArrayList;
-
 public class DetailActivity extends BaseActivity {
 
-	private static final int SDK_PERMISSION_REQUEST = 100;
+	//private static final int SDK_PERMISSION_REQUEST = 100;
 	private MapView mapView = null;
 	private BaiduMap baiduMap;
 	private LocationClient locationClient;
@@ -35,7 +27,8 @@ public class DetailActivity extends BaseActivity {
 		if (!locManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 			Toast.makeText(DetailActivity.this, "未打开GPS开关，可能导致定位失败或定位不准", Toast.LENGTH_SHORT).show();
 		}
-		getPermissions();
+		//getPermissions();
+		initView();
 	}
 
 	private void initView() {
@@ -86,25 +79,25 @@ public class DetailActivity extends BaseActivity {
 	/**
 	 * 根据Android版本动态获取权限，6.0以上需要动态获取权限
 	 */
-	private void getPermissions() {
+	/*private void getPermissions() {
 		if (Build.VERSION.SDK_INT >= 23) {
 			ArrayList<String> permissions = new ArrayList<String>();
 			int checkCoarsePermission = ContextCompat.checkSelfPermission(this, Manifest.permission
 					.ACCESS_COARSE_LOCATION);
 			int checkFinePermission = ContextCompat.checkSelfPermission(this, Manifest.permission
 					.ACCESS_FINE_LOCATION);
-			/*
+			*//*
 			 * 定位必须权限
-			 */
+			 *//*
 			if (checkCoarsePermission != PackageManager.PERMISSION_GRANTED) {
 				permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
 			}
 			if (checkFinePermission != PackageManager.PERMISSION_GRANTED) {
 				permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
 			}
-			/*
+			*//*
 			 * 读写权限，定位非必要
-			 */
+			 *//*
 			addPermission(permissions, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 			addPermission(permissions, Manifest.permission.READ_EXTERNAL_STORAGE);
 			addPermission(permissions, Manifest.permission.READ_PHONE_STATE);
@@ -147,5 +140,5 @@ public class DetailActivity extends BaseActivity {
 			default:
 				super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 		}
-	}
+	}*/
 }

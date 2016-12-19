@@ -22,7 +22,6 @@ public class AddCourseActivityRecyclerViewAdapter extends RecyclerView.Adapter<A
 
 	private Activity mActivity;
 	private List<Course> courseList;
-	private final int ADD_SUCCEED = 11;
 
 	public AddCourseActivityRecyclerViewAdapter(Activity activity, List<Course> courseList) {
 		this.courseList = courseList;

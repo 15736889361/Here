@@ -90,7 +90,7 @@ public class LocationUtil {
 			//设置定位数据, 只有先允许定位图层后设置数据才会生效，参见 setMyLocationEnabled(boolean)
 			mBaiduMap.setMyLocationData(locationData);
 			//配置定位图层显示方式,三个参数的构造器
-			BitmapDescriptor currentMarker = BitmapDescriptorFactory.fromResource(R.drawable.icon_geo);
+			BitmapDescriptor currentMarker = BitmapDescriptorFactory.fromResource(R.drawable.current);
 			MyLocationConfiguration configuration = new MyLocationConfiguration(MyLocationConfiguration.LocationMode
 					.NORMAL, true, currentMarker);
 			mBaiduMap.setMyLocationConfigeration(configuration);

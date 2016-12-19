@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.electhuang.here.view.RegSwitchActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp">
+
+        <include layout="@layout/toolbar"/>
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2">
+
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/map_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:clickable="true">
+
+        </com.baidu.mapapi.map.MapView>
+    </FrameLayout>
+
+    <LinearLayout
+        style="@style/group_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="2"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_start_reg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="开始签到"/>
+
+        <Button
+            android:id="@+id/btn_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="签到记录"/>
+
+        <Button
+            android:id="@+id/btn_read_followers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="查看学生"/>
+    </LinearLayout>
+</LinearLayout>
