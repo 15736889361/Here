@@ -40,7 +40,12 @@ public class DetailActivity extends BaseActivity {
 	private void initLocation() {
 		locationClient = new LocationClient(getApplicationContext());
 		LocationUtil locationUtil = new LocationUtil(getApplicationContext(), baiduMap, locationClient);
-		locationUtil.initLocation();
+		locationUtil.initLocation(new LocationUtil.OnInitLocationListener() {
+			@Override
+			public void initSucceed() {
+
+			}
+		});
 	}
 
 	@Override

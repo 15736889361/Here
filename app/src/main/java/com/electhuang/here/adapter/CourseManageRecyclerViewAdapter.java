@@ -65,7 +65,10 @@ public class CourseManageRecyclerViewAdapter extends RecyclerView.Adapter<Course
 			itemView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
+					Course currentCourse = courseList.get(getLayoutPosition());
+					String serializedString = currentCourse.toString();
 					Intent intent = new Intent(mActivity, RegSwitchActivity.class);
+					intent.putExtra("currentCourse", serializedString);
 					mActivity.startActivity(intent);
 				}
 			});

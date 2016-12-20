@@ -9,15 +9,10 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.BitmapDescriptor;
-import com.baidu.mapapi.map.BitmapDescriptorFactory;
-import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.model.LatLng;
-import com.electhuang.here.R;
 
 /**
  * 定位工具类
@@ -27,6 +22,22 @@ public class LocationUtil {
 	private BaiduMap mBaiduMap;
 	private LocationClient mLocationClient;
 	private Context context;
+	private BDLocation mLocation = null;
+	private double mLatitude;//纬度
+	private double mLongitude;//经度
+	OnInitLocationListener mInitLocationListener;
+
+	public BDLocation getmLocation() {
+		return mLocation;
+	}
+
+	public double getmLongitude() {
+		return mLongitude;
+	}
+
+	public double getmLatitude() {
+		return mLatitude;
+	}
 
 	public LocationUtil(Context context, BaiduMap baiduMap, LocationClient locationClient) {
 		this.mBaiduMap = baiduMap;
@@ -37,7 +48,8 @@ public class LocationUtil {
 	/**
 	 * 初始化地图显示
 	 */
-	public void initLocation() {
+	public void initLocation(OnInitLocationListener initLocationListener) {
+		this.mInitLocationListener = initLocationListener;
 		//开启定位
 		mBaiduMap.setMyLocationEnabled(true);
 		MyLocationListener listener = new MyLocationListener();
@@ -82,32 +94,44 @@ public class LocationUtil {
             */
 			double latitude = bdLocation.getLatitude();
 			double longitude = bdLocation.getLongitude();
-			//Log.e("TAG", "location(" + latitude + "," + longitude + ")");
-			Log.e("TAG", "详细地址:" + bdLocation.getLocType() + "-" + bdLocation.getNetworkLocationType());
-			MyLocationData locationData = new MyLocationData.Builder().accuracy(bdLocation.getRadius())
-					//.direction(100)
-					.latitude(latitude).longitude(longitude).build();
+
+			mLocation = bdLocation;
+			mLatitude = latitude;
+			mLongitude = longitude;
+
+			Log.e("TAG", "详细地址:" + bdLocation.getLocType() + "-" + bdLocation.getLocationDescribe());
+			MyLocationData locationData = new MyLocationData.Builder().accuracy(bdLocation.getRadius()).direction
+					(bdLocation.getDirection()).latitude(latitude).longitude(longitude).build();
 			//设置定位数据, 只有先允许定位图层后设置数据才会生效，参见 setMyLocationEnabled(boolean)
 			mBaiduMap.setMyLocationData(locationData);
+			mBaiduMap.setMaxAndMinZoomLevel(21, 18);
 			//配置定位图层显示方式,三个参数的构造器
-			BitmapDescriptor currentMarker = BitmapDescriptorFactory.fromResource(R.drawable.current);
+			//BitmapDescriptor currentMarker = BitmapDescriptorFactory.fromResource(R.drawable.current);
 			MyLocationConfiguration configuration = new MyLocationConfiguration(MyLocationConfiguration.LocationMode
-					.NORMAL, true, currentMarker);
+					.FOLLOWING, true, null);
 			mBaiduMap.setMyLocationConfigeration(configuration);
 
 			//判断是否为第一次定位,是的话需要定位到用户当前位置
 			if (isFirstIn) {
-				//地理坐标基本数据结构
-				LatLng latLng = new LatLng(bdLocation.getLatitude(), bdLocation.getLongitude());
+				/*//地理坐标基本数据结构
+				LatLng latLng = new LatLng(latitude, longitude);
 				MapStatus status = new MapStatus.Builder().target(latLng).zoom(20).build();
 				//描述地图状态将要发生的变化,通过当前经纬度来使地图显示到该位置
 				MapStatusUpdate msu = MapStatusUpdateFactory.newMapStatus(status);
 
 				//改变地图状态
-				mBaiduMap.setMapStatus(msu);
+				mBaiduMap.setMapStatus(msu);*/
+				MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(20);
+				mBaiduMap.animateMapStatus(msu);
 				isFirstIn = false;
 				Toast.makeText(context, bdLocation.getAddrStr(), Toast.LENGTH_SHORT).show();
 			}
+			mInitLocationListener.initSucceed();
 		}
+	}
+
+	public interface OnInitLocationListener{
+
+		void initSucceed();
 	}
 }
