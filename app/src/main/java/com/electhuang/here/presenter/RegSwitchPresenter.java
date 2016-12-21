@@ -12,17 +12,18 @@ import com.electhuang.here.presenter.ipresenterbind.IRegSwitchPresenter;
 public class RegSwitchPresenter implements IRegSwitchPresenter {
 
 	private IRegSwitchModel regSwitchModel = new RegSwitchModel(this);
-	private OnClickRegListener listener;
+	private OnStartRegListener startRegListener;
+	private OnStopRegListener stopRegListener;
 
 	@Override
-	public void startReg(Course currentCourse, BDLocation bdLocation, OnClickRegListener listener) {
-		this.listener = listener;
+	public void startReg(Course currentCourse, BDLocation bdLocation, OnStartRegListener listener) {
+		this.startRegListener = listener;
 		regSwitchModel.startReg(currentCourse, bdLocation);
 	}
 
 	@Override
-	public void stopReg(Course currentCourse, OnClickRegListener listener) {
-		this.listener = listener;
+	public void stopReg(Course currentCourse, OnStopRegListener listener) {
+		this.stopRegListener = listener;
 		regSwitchModel.stopReg(currentCourse);
 	}
 
@@ -33,18 +34,18 @@ public class RegSwitchPresenter implements IRegSwitchPresenter {
 	}
 
 	public void startSucceed() {
-		listener.succeed();
+		startRegListener.startSucceed();
 	}
 
 	public void startFail() {
-		listener.fail();
+		startRegListener.startFail();
 	}
 
 	public void stopSucceed() {
-		listener.succeed();
+		stopRegListener.stopSucceed();
 	}
 
 	public void stopFail() {
-		listener.fail();
+		stopRegListener.stopFail();
 	}
 }

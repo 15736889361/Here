@@ -6,6 +6,7 @@ import com.baidu.location.BDLocation;
 import com.electhuang.here.beans.Course;
 import com.electhuang.here.model.imodelbind.IRegSwitchModel;
 import com.electhuang.here.presenter.RegSwitchPresenter;
+import com.electhuang.here.utils.LogUtil;
 
 /**
  * Created by elecdog on 2016/12/20.
@@ -20,8 +21,8 @@ public class RegSwitchModel implements IRegSwitchModel {
 
 	@Override
 	public void startReg(Course currentCourse, BDLocation bdLocation) {
-		currentCourse.put("regAddress", bdLocation);
-		currentCourse.put("isRegNow", true);
+		currentCourse.setRegAddress(bdLocation);
+		currentCourse.setRegNow(true);
 		currentCourse.saveInBackground(new SaveCallback() {
 			@Override
 			public void done(AVException e) {
@@ -36,7 +37,8 @@ public class RegSwitchModel implements IRegSwitchModel {
 
 	@Override
 	public void stopReg(Course currentCourse) {
-		currentCourse.put("isRegNow", false);
+		currentCourse.setRegAddress(null);
+		currentCourse.setRegNow(false);
 		currentCourse.saveInBackground(new SaveCallback() {
 			@Override
 			public void done(AVException e) {
@@ -51,7 +53,9 @@ public class RegSwitchModel implements IRegSwitchModel {
 
 	@Override
 	public boolean isRegNow(Course course) {
-		boolean isRegNow = (boolean) course.get("isRegNow");
+		//boolean isRegNow = (boolean) course.get("isRegNow");
+		boolean isRegNow = course.isRegNow();
+		LogUtil.e(RegSwitchModel.class, "是否处于签到状态：" + isRegNow);
 		return isRegNow;
 	}
 }

@@ -24,9 +24,21 @@ public class LogUtil {
 		}
 	}
 
+	public static void v(Class clazz, String msg) {
+		if (LEVEL <= VERBOSE) {
+			Log.v(clazz.getSimpleName(), msg);
+		}
+	}
+
 	public static void d(String tag, String msg) {
 		if (LEVEL <= DEBUG) {
 			Log.d(tag, msg);
+		}
+	}
+
+	public static void d(Class clazz, String msg) {
+		if (LEVEL <= DEBUG) {
+			Log.d(clazz.getSimpleName(), msg);
 		}
 	}
 
@@ -36,15 +48,33 @@ public class LogUtil {
 		}
 	}
 
+	public static void i(Class clazz, String msg) {
+		if (LEVEL <= INFO) {
+			Log.i(clazz.getSimpleName(), msg);
+		}
+	}
+
 	public static void w(String tag, String msg) {
 		if (LEVEL <= WARN) {
 			Log.w(tag, msg);
 		}
 	}
 
+	public static void w(Class clazz, String msg) {
+		if (LEVEL <= WARN) {
+			Log.w(clazz.getSimpleName(), msg);
+		}
+	}
+
 	public static void e(String tag, String msg) {
 		if (LEVEL <= ERROR) {
 			Log.e(tag, msg);
+		}
+	}
+
+	public static void e(Class clazz, String msg) {
+		if (LEVEL <= ERROR) {
+			Log.e(clazz.getSimpleName(), msg);
 		}
 	}
 }

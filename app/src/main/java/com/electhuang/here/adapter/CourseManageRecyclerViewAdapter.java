@@ -8,8 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.RefreshCallback;
 import com.electhuang.here.R;
 import com.electhuang.here.beans.Course;
+import com.electhuang.here.utils.LogUtil;
 import com.electhuang.here.view.RegSwitchActivity;
 
 import java.util.List;
@@ -66,10 +70,19 @@ public class CourseManageRecyclerViewAdapter extends RecyclerView.Adapter<Course
 				@Override
 				public void onClick(View view) {
 					Course currentCourse = courseList.get(getLayoutPosition());
-					String serializedString = currentCourse.toString();
-					Intent intent = new Intent(mActivity, RegSwitchActivity.class);
-					intent.putExtra("currentCourse", serializedString);
-					mActivity.startActivity(intent);
+					//先同步云端数据，防止签到状态没有更新
+					String key = "isRegNow";
+					currentCourse.refreshInBackground(key, new RefreshCallback<AVObject>() {
+						@Override
+						public void done(AVObject avObject, AVException e) {
+							Course course = (Course) avObject;
+							LogUtil.e(getClass(), "----status:" + course.getBoolean("isRegNow"));
+							String serializedString = course.toString();
+							Intent intent = new Intent(mActivity, RegSwitchActivity.class);
+							intent.putExtra("currentCourse", serializedString);
+							mActivity.startActivity(intent);
+						}
+					});
 				}
 			});
 		}

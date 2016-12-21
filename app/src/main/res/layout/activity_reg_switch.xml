@@ -60,11 +60,25 @@
         android:layout_weight="2"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_start_reg"
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="开始签到"/>
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/btn_start_reg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="开始签到"
+                android:visibility="gone"/>
+
+            <Button
+                android:id="@+id/btn_stop_reg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="正在签到"
+                android:visibility="gone"/>
+        </RelativeLayout>
+
 
         <Button
             android:id="@+id/btn_record"

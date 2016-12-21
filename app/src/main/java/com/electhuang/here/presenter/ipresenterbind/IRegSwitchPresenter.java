@@ -14,14 +14,14 @@ public interface IRegSwitchPresenter {
 	 * @param currentCourse
 	 * @param bdLocation
 	 */
-	void startReg(Course currentCourse, BDLocation bdLocation, OnClickRegListener listener);
+	void startReg(Course currentCourse, BDLocation bdLocation, OnStartRegListener listener);
 
 	/**
 	 * 给课程结束接收签到的方法
 	 *
 	 * @param currentCourse
 	 */
-	void stopReg(Course currentCourse, OnClickRegListener listener);
+	void stopReg(Course currentCourse, OnStopRegListener listener);
 
 	/**
 	 * 检查课程是否处于接受签到状态
@@ -33,10 +33,20 @@ public interface IRegSwitchPresenter {
 	/**
 	 * 启动签到的监听方法
 	 */
-	interface OnClickRegListener {
+	interface OnStartRegListener {
 
-		void succeed();
+		void startSucceed();
 
-		void fail();
+		void startFail();
+	}
+
+	/**
+	 * 停止签到的监听方法
+	 */
+	interface OnStopRegListener {
+
+		void stopSucceed();
+
+		void stopFail();
 	}
 }

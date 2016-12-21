@@ -72,7 +72,9 @@
             android:process=":remote">
         </service>
 
-        <activity android:name=".view.RegSwitchActivity">
+        <activity
+            android:name=".view.RegSwitchActivity"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

@@ -30,7 +30,7 @@ public class RegSwitchActivity extends BaseActivity implements View.OnClickListe
 	private BDLocation bdLocation;
 	private IRegSwitchPresenter regSwitchPresenter = new RegSwitchPresenter();
 	private Button btn_start_reg;
-	private boolean isRegNow;
+	private Button btn_stop_reg;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +40,12 @@ public class RegSwitchActivity extends BaseActivity implements View.OnClickListe
 		String currentCourseString = intent.getStringExtra("currentCourse");
 		try {
 			currentCourse = (Course) Course.parseAVObject(currentCourseString);
+			LogUtil.e("TAG", "---currentCourse:" + currentCourse);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		initToolbar("课程管理");
+		String courseName = currentCourse.getString("courseName");
+		initToolbar(courseName);
 		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		if (!locManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 			Toast.makeText(RegSwitchActivity.this, "未打开GPS开关，可能导致定位失败或定位不准", Toast.LENGTH_SHORT).show();
@@ -53,18 +55,21 @@ public class RegSwitchActivity extends BaseActivity implements View.OnClickListe
 
 	private void initView() {
 		btn_start_reg = (Button) findViewById(R.id.btn_start_reg);
+		btn_stop_reg = (Button) findViewById(R.id.btn_stop_reg);
 		Button btn_record = (Button) findViewById(R.id.btn_record);
 		Button btn_read_followers = (Button) findViewById(R.id.btn_read_followers);
 		tv_current_location = (TextView) findViewById(R.id.tv_current_location);
 		mapView = (MapView) findViewById(R.id.map_view);
-		isRegNow = regSwitchPresenter.isRegNow(currentCourse);
-		if (isRegNow) {
-			btn_start_reg.setText("正在接受签到");
+		if (regSwitchPresenter.isRegNow(currentCourse)) {
+			btn_start_reg.setVisibility(View.GONE);
+			btn_stop_reg.setVisibility(View.VISIBLE);
 		} else {
-			btn_start_reg.setText("开始签到");
+			btn_start_reg.setVisibility(View.VISIBLE);
+			btn_stop_reg.setVisibility(View.GONE);
 		}
 
 		btn_start_reg.setOnClickListener(this);
+		btn_stop_reg.setOnClickListener(this);
 		btn_record.setOnClickListener(this);
 		btn_read_followers.setOnClickListener(this);
 		baiduMap = mapView.getMap();
@@ -120,38 +125,33 @@ public class RegSwitchActivity extends BaseActivity implements View.OnClickListe
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.btn_start_reg:
-				if (!isRegNow) {
-					LogUtil.e(getClass().getSimpleName(), "start");
-					regSwitchPresenter.startReg(currentCourse, bdLocation, new IRegSwitchPresenter.OnClickRegListener
-							() {
-						@Override
-						public void succeed() {
-							Toast.makeText(RegSwitchActivity.this, "已经开始接受签到", Toast.LENGTH_SHORT).show();
-							btn_start_reg.setText("正在接受签到");
-							isRegNow = true;
-						}
+				regSwitchPresenter.startReg(currentCourse, bdLocation, new IRegSwitchPresenter.OnStartRegListener() {
 
-						@Override
-						public void fail() {
+					@Override
+					public void startSucceed() {
+						btn_start_reg.setVisibility(View.GONE);
+						btn_stop_reg.setVisibility(View.VISIBLE);
+					}
 
-						}
-					});
-				} else {
-					LogUtil.e(getClass().getSimpleName(), "start");
-					regSwitchPresenter.stopReg(currentCourse, new IRegSwitchPresenter.OnClickRegListener() {
-						@Override
-						public void succeed() {
-							Toast.makeText(RegSwitchActivity.this, "结束接受签到", Toast.LENGTH_SHORT).show();
-							btn_start_reg.setText("开始签到");
-							isRegNow = false;
-						}
+					@Override
+					public void startFail() {
+						Toast.makeText(RegSwitchActivity.this, "操作失败，请检查网络", Toast.LENGTH_SHORT).show();
+					}
+				});
+				break;
+			case R.id.btn_stop_reg:
+				regSwitchPresenter.stopReg(currentCourse, new IRegSwitchPresenter.OnStopRegListener() {
+					@Override
+					public void stopSucceed() {
+						btn_start_reg.setVisibility(View.VISIBLE);
+						btn_stop_reg.setVisibility(View.GONE);
+					}
 
-						@Override
-						public void fail() {
-
-						}
-					});
-				}
+					@Override
+					public void stopFail() {
+						Toast.makeText(RegSwitchActivity.this, "操作失败，请检查网络", Toast.LENGTH_SHORT).show();
+					}
+				});
 				break;
 			case R.id.btn_record:
 				break;

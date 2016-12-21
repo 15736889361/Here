@@ -5,6 +5,7 @@ import android.os.Parcel;
 import com.avos.avoscloud.AVClassName;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
+import com.baidu.location.BDLocation;
 
 /**
  * Created by elecdog on 2016/12/9.
@@ -76,5 +77,21 @@ public class Course extends AVObject {
 
 	public void setRepeat(boolean repeat) {
 		put("isRepeat", repeat);
+	}
+
+	public boolean isRegNow() {
+		return getBoolean("isRegNow");
+	}
+
+	public void setRegNow(boolean regNow) {
+		put("isRegNow", regNow);
+	}
+
+	public BDLocation getRegAddress() {
+		return (BDLocation) get("regAddress");
+	}
+
+	public void setRegAddress(BDLocation bdLocation) {
+		put("regAddress", bdLocation);
 	}
 }
