@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.RefreshCallback;
 import com.electhuang.here.R;
 import com.electhuang.here.beans.Course;
 import com.electhuang.here.view.DetailActivity;
@@ -70,16 +73,25 @@ public class RegistrationFragmentRecyclerViewAdapter extends RecyclerView
 			itemView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					Course currentCourse = courseList.get(getLayoutPosition());
-					String serializedString = currentCourse.toString();
-					new InfoDialog(mActivity, serializedString, true, new InfoDialog.OnInfoDialogListener() {
+					final Course currentCourse = courseList.get(getLayoutPosition());
+					//先同步云端数据，防止签到状态没有更新
+					String key = "isRegNow";
+					currentCourse.refreshInBackground(key, new RefreshCallback<AVObject>() {
 						@Override
-						public void click() {
-							//Toast.makeText(mActivity, "签到", Toast.LENGTH_SHORT).show();
-							Intent intent = new Intent(mActivity, DetailActivity.class);
-							mActivity.startActivity(intent);
+						public void done(AVObject avObject, AVException e) {
+							final Course course = (Course) avObject;
+							final String serializedString =   course.toString();
+							new InfoDialog(mActivity, serializedString, true, new InfoDialog.OnInfoDialogListener() {
+								@Override
+								public void click() {
+									//Toast.makeText(mActivity, "签到", Toast.LENGTH_SHORT).show();
+									Intent intent = new Intent(mActivity, DetailActivity.class);
+									intent.putExtra("currentCourse", serializedString);
+									mActivity.startActivity(intent);
+								}
+							}).show();
 						}
-					}).show();
+					});
 				}
 			});
 

@@ -35,6 +35,9 @@ public class RegistrationModel implements IRegistrationModel {
 		try {
 			List<AVObject> list = query.find();
 			registrationPresenter.getAddedCourseSucceed();
+			if (HereApplication.addedCourseList.size() != 0) {
+				HereApplication.addedCourseList.clear();
+			}
 			for (AVObject course : list) {
 				courseList.add((Course) course);
 				HereApplication.addedCourseList.add((Course) course);

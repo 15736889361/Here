@@ -34,7 +34,8 @@ public class AddCourseActivity extends BaseActivity implements IAddCourseActivit
 	private void initView() {
 		pullLoadMoreRecyclerView = (PullLoadMoreRecyclerView) findViewById(R.id.pullLoadMoreRecyclerView);
 		pullLoadMoreRecyclerView.setLinearLayout();
-		pullLoadMoreRecyclerView.setRefreshing(false);
+		pullLoadMoreRecyclerView.setPullRefreshEnable(false);
+		pullLoadMoreRecyclerView.setPushRefreshEnable(false);
 		pullLoadMoreRecyclerView.setFooterViewText("loading");
 		mRecyclerViewAdapter = new AddCourseActivityRecyclerViewAdapter(this, mCourseList);
 		pullLoadMoreRecyclerView.setAdapter(mRecyclerViewAdapter);

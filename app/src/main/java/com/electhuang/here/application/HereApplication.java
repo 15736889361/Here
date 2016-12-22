@@ -8,6 +8,7 @@ import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
 import com.baidu.mapapi.SDKInitializer;
 import com.electhuang.here.beans.Course;
+import com.electhuang.here.beans.Registration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,8 @@ public class HereApplication extends Application {
 		SDKInitializer.initialize(getApplicationContext());
 		//子类化Course
 		AVObject.registerSubclass(Course.class);
+		//子类化Registration
+		AVObject.registerSubclass(Registration.class);
 		// 初始化参数依次为 this, AppId, AppKey
 		AVOSCloud.initialize(this, "m4YF1A318KwgIqHyQ5xSqLjO-gzGzoHsz", "Achl6SJ4rOilcaoEHqGEWswb");
 		if (AVUser.getCurrentUser() != null) {

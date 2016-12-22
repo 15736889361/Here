@@ -7,8 +7,11 @@ import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
 import com.baidu.location.BDLocation;
 
+import org.json.JSONObject;
+
 /**
  * Created by elecdog on 2016/12/9.
+ * 课程的实体类
  */
 @AVClassName("Course")
 public class Course extends AVObject {
@@ -87,8 +90,8 @@ public class Course extends AVObject {
 		put("isRegNow", regNow);
 	}
 
-	public BDLocation getRegAddress() {
-		return (BDLocation) get("regAddress");
+	public JSONObject getRegAddress() {
+		return getJSONObject("regAddress");
 	}
 
 	public void setRegAddress(BDLocation bdLocation) {

@@ -1,15 +1,29 @@
 package com.electhuang.here.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.CircleOptions;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.map.Stroke;
+import com.baidu.mapapi.model.LatLng;
 import com.electhuang.here.R;
+import com.electhuang.here.beans.Course;
 import com.electhuang.here.utils.LocationUtil;
+import com.electhuang.here.utils.LogUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class DetailActivity extends BaseActivity {
 
@@ -17,11 +31,20 @@ public class DetailActivity extends BaseActivity {
 	private MapView mapView = null;
 	private BaiduMap baiduMap;
 	private LocationClient locationClient;
+	private Course currentCourse;
+	private BDLocation mBDLocation;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_detail);
+		Intent intent = getIntent();
+		String serializedString = intent.getStringExtra("currentCourse");
+		try {
+			currentCourse = (Course) Course.parseAVObject(serializedString);
+		} catch (Exception e) {
+
+		}
 		initToolbar("签到验证");
 		LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		if (!locManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -34,7 +57,31 @@ public class DetailActivity extends BaseActivity {
 	private void initView() {
 		mapView = (MapView) findViewById(R.id.map_view);
 		baiduMap = mapView.getMap();
+		//初始化当前用户所在地点
 		initLocation();
+		//初始化签到的正确地点
+		initRegAddress();
+	}
+
+	private void initRegAddress() {
+		JSONObject regAddress = currentCourse.getRegAddress();
+		try {
+			double latitude = regAddress.getDouble("latitude");//纬度
+			double longitude = regAddress.getDouble("longitude");//经度
+			String addrStr = regAddress.getString("addrStr");
+			//LogUtil.e(getClass(), "签到位置信息:" + latitude + "," + longitude + "-" + addrStr);
+			LogUtil.e(getClass(), "签到位置信息:" + regAddress.toString());
+			LatLng point = new LatLng(latitude, longitude);
+			BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(R.drawable.here);
+			//构建MarkerOption，用于在地图上添加Marker
+			OverlayOptions options = new MarkerOptions().position(point).icon(bitmap).draggable(false);
+			baiduMap.addOverlay(options);
+			//在marker周围添加一个圆圈作为显示签到范围
+			OverlayOptions circleOption = new CircleOptions().center(point).radius(50).stroke(new Stroke(3, 0xAA33B5E5)).fillColor(0x5533B5E5);
+			baiduMap.addOverlay(circleOption);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initLocation() {
@@ -42,8 +89,8 @@ public class DetailActivity extends BaseActivity {
 		LocationUtil locationUtil = new LocationUtil(getApplicationContext(), baiduMap, locationClient);
 		locationUtil.initLocation(new LocationUtil.OnInitLocationListener() {
 			@Override
-			public void initSucceed() {
-
+			public void initSucceed(BDLocation bdLocation) {
+				mBDLocation = bdLocation;
 			}
 		});
 	}

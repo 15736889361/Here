@@ -2,7 +2,6 @@ package com.electhuang.here.view;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -22,7 +21,6 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
@@ -113,16 +111,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 	}
 
 	private void initSearchView() {
-		MenuItem menuItem = toolbar.getMenu().findItem(R.id.menu_search);
-		SearchView searchView = (SearchView) menuItem.getActionView();
+		final MenuItem menuItem = toolbar.getMenu().findItem(R.id.menu_search);
+		final SearchView searchView = (SearchView) menuItem.getActionView();
 		searchView.setQueryHint("搜索教师来加入TA的课程...");
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				if (imm != null) {
-					imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
-				}
+				searchView.clearFocus();
+				//searchView.setActivated(false);
+				//MenuItemCompat.collapseActionView(menuItem);
 				Intent intent = new Intent(getApplicationContext(), AddCourseActivity.class);
 				intent.putExtra("creator", query);
 				startActivity(intent);

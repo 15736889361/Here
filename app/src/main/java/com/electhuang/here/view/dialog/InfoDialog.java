@@ -71,6 +71,7 @@ public class InfoDialog extends Dialog implements View.OnClickListener {
 		String course_date = course.getCourse_date();
 		String description = course.getDescription();
 		String creator = course.getCreator().getUsername();
+		boolean isRegNow = course.isRegNow();
 
 		tv_course_name.setText(courseName);
 		tv_creator.setText(creator);
@@ -80,13 +81,15 @@ public class InfoDialog extends Dialog implements View.OnClickListener {
 		tv_description.setText(description);
 		if (regAble) {
 			ll_reg.setVisibility(View.VISIBLE);
+			if (!isRegNow) {
+				btn_reg.setEnabled(false);
+			}
 		} else {
 			btn_add.setVisibility(View.VISIBLE);
 			if (!isAdded) {
 				btn_add.setText("加入课程");
 			} else {
 				btn_add.setText("已加入");
-				btn_add.setClickable(false);
 			}
 		}
 
@@ -106,7 +109,9 @@ public class InfoDialog extends Dialog implements View.OnClickListener {
 				dismiss();
 				break;
 			case R.id.btn_add:
-				listener.click();
+				if (!isAdded) {
+					listener.click();
+				}
 				dismiss();
 				break;
 		}

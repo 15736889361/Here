@@ -8,7 +8,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVRelation;
+import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.SaveCallback;
 import com.electhuang.here.R;
+import com.electhuang.here.application.HereApplication;
 import com.electhuang.here.beans.Course;
 import com.electhuang.here.view.dialog.InfoDialog;
 
@@ -68,12 +74,26 @@ public class AddCourseActivityRecyclerViewAdapter extends RecyclerView.Adapter<A
 			itemView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					Course currentCourse = courseList.get(getLayoutPosition());
+					final Course currentCourse = courseList.get(getLayoutPosition());
 					String serializedString = currentCourse.toString();
 					new InfoDialog(mActivity, serializedString, false, new InfoDialog.OnInfoDialogListener() {
 						@Override
 						public void click() {
-							Toast.makeText(mActivity, "加入", Toast.LENGTH_SHORT).show();
+							//Toast.makeText(mActivity, "加入", Toast.LENGTH_SHORT).show();
+							AVUser user = AVUser.getCurrentUser();
+							AVRelation<AVObject> relation = user.getRelation("courses");
+							relation.add(currentCourse);
+							user.saveInBackground(new SaveCallback() {
+								@Override
+								public void done(AVException e) {
+									if (e == null) {
+										Toast.makeText(mActivity, "添加成功", Toast.LENGTH_SHORT).show();
+										HereApplication.addedCourseList.add(currentCourse);
+									} else {
+										Toast.makeText(mActivity, "添加失败", Toast.LENGTH_SHORT).show();
+									}
+								}
+							});
 						}
 					}).show();
 				}

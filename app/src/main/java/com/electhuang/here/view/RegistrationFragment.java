@@ -16,6 +16,7 @@ import com.electhuang.here.application.HereApplication;
 import com.electhuang.here.beans.Course;
 import com.electhuang.here.presenter.RegistrationPresenter;
 import com.electhuang.here.presenter.ipresenterbind.IRegistrationPresenter;
+import com.electhuang.here.utils.LogUtil;
 import com.electhuang.here.view.iviewbind.BaseFragment;
 import com.electhuang.here.view.iviewbind.IRegistrationFragment;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
@@ -54,6 +55,7 @@ public class RegistrationFragment extends BaseFragment implements IRegistrationF
 		mPullLoadMoreRecyclerView = (PullLoadMoreRecyclerView) view.findViewById(R.id.pullLoadMoreRecyclerView);
 		mPullLoadMoreRecyclerView.setLinearLayout();
 		mPullLoadMoreRecyclerView.setRefreshing(true);
+		mPullLoadMoreRecyclerView.setPushRefreshEnable(false);
 		mPullLoadMoreRecyclerView.setFooterViewText("loading");
 		mRecyclerViewAdapter = new RegistrationFragmentRecyclerViewAdapter(getActivity(), mCourseList);
 		mPullLoadMoreRecyclerView.setAdapter(mRecyclerViewAdapter);
@@ -69,10 +71,20 @@ public class RegistrationFragment extends BaseFragment implements IRegistrationF
 
 			@Override
 			public void onLoadMore() {
-				loadMore();
+				//loadMore();
 			}
 		});
 		setList();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		LogUtil.e(getClass(), "onResume");
+		/*if (mCourseList.size() != HereApplication.addedCourseList.size()) {
+			mRecyclerViewAdapter.notifyDataSetChanged();
+			LogUtil.e(getClass(), "两次");
+		}*/
 	}
 
 	@Override
@@ -100,26 +112,26 @@ public class RegistrationFragment extends BaseFragment implements IRegistrationF
 				List<Course> courseList = registrationPresenter.getAddedCourse(HereApplication.currentUser, new
 						IRegistrationPresenter.OnGetAddedCourseListener() {
 
+					@Override
+					public void onGetAddedCourseSucceed() {
+						getActivity().runOnUiThread(new Runnable() {
 							@Override
-							public void onGetAddedCourseSucceed() {
-								getActivity().runOnUiThread(new Runnable() {
-									@Override
-									public void run() {
-										Toast.makeText(getActivity(), "列表刷新成功", Toast.LENGTH_SHORT).show();
-									}
-								});
-							}
-
-							@Override
-							public void onGetAddedCourseFail() {
-								getActivity().runOnUiThread(new Runnable() {
-									@Override
-									public void run() {
-										Toast.makeText(getActivity(), "获取数据失败，请查看网络连接", Toast.LENGTH_SHORT).show();
-									}
-								});
+							public void run() {
+								Toast.makeText(getActivity(), "列表刷新成功", Toast.LENGTH_SHORT).show();
 							}
 						});
+					}
+
+					@Override
+					public void onGetAddedCourseFail() {
+						getActivity().runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								Toast.makeText(getActivity(), "获取数据失败，请查看网络连接", Toast.LENGTH_SHORT).show();
+							}
+						});
+					}
+				});
 				mCourseList.addAll(courseList);
 				Log.e("TAG", "courseList长度:" + mCourseList.size());
 				getActivity().runOnUiThread(new Runnable() {

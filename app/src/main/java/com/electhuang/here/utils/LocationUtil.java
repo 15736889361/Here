@@ -22,22 +22,7 @@ public class LocationUtil {
 	private BaiduMap mBaiduMap;
 	private LocationClient mLocationClient;
 	private Context context;
-	private BDLocation mLocation = null;
-	private double mLatitude;//纬度
-	private double mLongitude;//经度
 	OnInitLocationListener mInitLocationListener;
-
-	public BDLocation getmLocation() {
-		return mLocation;
-	}
-
-	public double getmLongitude() {
-		return mLongitude;
-	}
-
-	public double getmLatitude() {
-		return mLatitude;
-	}
 
 	public LocationUtil(Context context, BaiduMap baiduMap, LocationClient locationClient) {
 		this.mBaiduMap = baiduMap;
@@ -94,11 +79,6 @@ public class LocationUtil {
             */
 			double latitude = bdLocation.getLatitude();
 			double longitude = bdLocation.getLongitude();
-
-			mLocation = bdLocation;
-			mLatitude = latitude;
-			mLongitude = longitude;
-
 			Log.e("TAG", "详细地址:" + bdLocation.getLocType() + "-" + bdLocation.getLocationDescribe());
 			MyLocationData locationData = new MyLocationData.Builder().accuracy(bdLocation.getRadius()).direction
 					(bdLocation.getDirection()).latitude(latitude).longitude(longitude).build();
@@ -126,12 +106,12 @@ public class LocationUtil {
 				isFirstIn = false;
 				Toast.makeText(context, bdLocation.getAddrStr(), Toast.LENGTH_SHORT).show();
 			}
-			mInitLocationListener.initSucceed();
+			mInitLocationListener.initSucceed(bdLocation);
 		}
 	}
 
 	public interface OnInitLocationListener{
 
-		void initSucceed();
+		void initSucceed(BDLocation bdLocation);
 	}
 }

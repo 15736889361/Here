@@ -27,7 +27,7 @@ public class RegSwitchActivity extends BaseActivity implements View.OnClickListe
 	private MapView mapView;
 	private TextView tv_current_location;
 	private Course currentCourse;
-	private BDLocation bdLocation;
+	private BDLocation mBDLocation;
 	private IRegSwitchPresenter regSwitchPresenter = new RegSwitchPresenter();
 	private Button btn_start_reg;
 	private Button btn_stop_reg;
@@ -81,8 +81,8 @@ public class RegSwitchActivity extends BaseActivity implements View.OnClickListe
 		final LocationUtil locationUtil = new LocationUtil(getApplicationContext(), baiduMap, locationClient);
 		locationUtil.initLocation(new LocationUtil.OnInitLocationListener() {
 			@Override
-			public void initSucceed() {
-				bdLocation = locationUtil.getmLocation();
+			public void initSucceed(BDLocation bdLocation) {
+				mBDLocation = bdLocation;
 				tv_current_location.setText(bdLocation.getAddrStr() + "(" + bdLocation.getLocationDescribe() + ")");
 			}
 		});
@@ -125,7 +125,7 @@ public class RegSwitchActivity extends BaseActivity implements View.OnClickListe
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.btn_start_reg:
-				regSwitchPresenter.startReg(currentCourse, bdLocation, new IRegSwitchPresenter.OnStartRegListener() {
+				regSwitchPresenter.startReg(currentCourse, mBDLocation, new IRegSwitchPresenter.OnStartRegListener() {
 
 					@Override
 					public void startSucceed() {
