@@ -37,9 +37,6 @@ public class LocationUtil {
 		this.mInitLocationListener = initLocationListener;
 		//开启定位
 		mBaiduMap.setMyLocationEnabled(true);
-		MyLocationListener listener = new MyLocationListener();
-		//注册监听函数
-		mLocationClient.registerLocationListener(listener);
 
 		//配置定位SDK各配置参数，比如定位模式、定位时间间隔、坐标系类型等
 		LocationClientOption option = new LocationClientOption();
@@ -57,6 +54,10 @@ public class LocationUtil {
 		option.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤GPS仿真结果，默认需要
 
 		mLocationClient.setLocOption(option);
+
+		MyLocationListener listener = new MyLocationListener();
+		//注册监听函数
+		mLocationClient.registerLocationListener(listener);
 	}
 
 	/**
@@ -84,7 +85,7 @@ public class LocationUtil {
 					(bdLocation.getDirection()).latitude(latitude).longitude(longitude).build();
 			//设置定位数据, 只有先允许定位图层后设置数据才会生效，参见 setMyLocationEnabled(boolean)
 			mBaiduMap.setMyLocationData(locationData);
-			mBaiduMap.setMaxAndMinZoomLevel(21, 18);
+			mBaiduMap.setMaxAndMinZoomLevel(21, 17);
 			//配置定位图层显示方式,三个参数的构造器
 			//BitmapDescriptor currentMarker = BitmapDescriptorFactory.fromResource(R.drawable.current);
 			MyLocationConfiguration configuration = new MyLocationConfiguration(MyLocationConfiguration.LocationMode

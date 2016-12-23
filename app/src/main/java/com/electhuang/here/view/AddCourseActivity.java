@@ -14,6 +14,9 @@ import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 课程搜索结果页面
+ */
 public class AddCourseActivity extends BaseActivity implements IAddCourseActivity {
 
 	private List<Course> mCourseList = new ArrayList<Course>();

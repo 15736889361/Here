@@ -71,8 +71,8 @@ public class CourseManageRecyclerViewAdapter extends RecyclerView.Adapter<Course
 				public void onClick(View view) {
 					Course currentCourse = courseList.get(getLayoutPosition());
 					//先同步云端数据，防止签到状态没有更新
-					String key = "isRegNow";
-					currentCourse.refreshInBackground(key, new RefreshCallback<AVObject>() {
+					//String key = "isRegNow";
+					currentCourse.refreshInBackground(new RefreshCallback<AVObject>() {
 						@Override
 						public void done(AVObject avObject, AVException e) {
 							Course course = (Course) avObject;

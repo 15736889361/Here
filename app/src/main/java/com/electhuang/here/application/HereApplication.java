@@ -1,6 +1,7 @@
 package com.electhuang.here.application;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 
 import com.avos.avoscloud.AVOSCloud;
@@ -20,6 +21,7 @@ public class HereApplication extends Application {
 
 	public static AVUser currentUser;
 	public static List<Course> addedCourseList = new ArrayList<Course>();
+	private static Context context;
 
 	@Override
 	public void onCreate() {
@@ -35,5 +37,10 @@ public class HereApplication extends Application {
 			currentUser = AVUser.getCurrentUser();
 			Log.e("TAG", "currentUser:" + currentUser);
 		}
+		context = getApplicationContext();
+	}
+
+	public static Context getContext() {
+		return context;
 	}
 }

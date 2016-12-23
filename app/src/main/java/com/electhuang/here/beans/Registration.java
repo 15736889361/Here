@@ -8,6 +8,7 @@ import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVRelation;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,8 @@ import java.util.List;
  * 签到的实体类
  */
 @AVClassName("Registration")
-public class Registration extends AVObject{
+public class Registration extends AVObject {
+
 	public static final Creator CREATOR = AVObjectCreator.instance;
 
 	public Registration() {
@@ -27,11 +29,6 @@ public class Registration extends AVObject{
 	public Registration(Parcel in) {
 		super(in);
 	}
-
-	private String startTime;
-	private String stopTime;
-	private Course pertain;
-	private List<AVUser> regSucceeds;
 
 	public String getStartTime() {
 		return getString("startTime");
@@ -50,7 +47,7 @@ public class Registration extends AVObject{
 	}
 
 	public Course getPertain() throws Exception {
-		return getAVObject("pertain",Course.class);
+		return getAVObject("pertain", Course.class);
 	}
 
 	public void setPertain(Course pertain) {
@@ -74,6 +71,16 @@ public class Registration extends AVObject{
 
 	public void setRegSucceed(AVUser user) {
 		AVRelation<AVObject> relation = getRelation("regs");
+		relation.add(user);
+		saveInBackground(new SaveCallback() {
+			@Override
+			public void done(AVException e) {
+				if (e == null) {
 
+				} else {
+
+				}
+			}
+		});
 	}
 }

@@ -75,8 +75,8 @@ public class RegistrationFragmentRecyclerViewAdapter extends RecyclerView
 				public void onClick(View view) {
 					final Course currentCourse = courseList.get(getLayoutPosition());
 					//先同步云端数据，防止签到状态没有更新
-					String key = "isRegNow";
-					currentCourse.refreshInBackground(key, new RefreshCallback<AVObject>() {
+					//String key = "isRegNow";
+					currentCourse.refreshInBackground(new RefreshCallback<AVObject>() {
 						@Override
 						public void done(AVObject avObject, AVException e) {
 							final Course course = (Course) avObject;
