@@ -13,12 +13,15 @@ import com.electhuang.here.model.imodelbind.IDetailModel;
 import com.electhuang.here.presenter.DetailPresenter;
 import com.electhuang.here.utils.LogUtil;
 
+import java.util.List;
+
 /**
  * Created by elecdog on 2016/12/22.
  */
 public class DetailModel implements IDetailModel {
 
 	private DetailPresenter detailPresenter;
+	private boolean isRegED = false;
 
 	public DetailModel(DetailPresenter detailPresenter) {
 		this.detailPresenter = detailPresenter;
@@ -48,5 +51,27 @@ public class DetailModel implements IDetailModel {
 				}
 			}
 		});
+	}
+
+	@Override
+	public boolean isRegED(Course currentCourse) {
+		AVQuery<Registration> query = new AVQuery<>("Registration");
+		query.whereEqualTo("pertain", currentCourse);
+		try {
+			Registration registration = query.getFirst();
+			AVRelation<AVObject> relation = registration.getRelation("regs");
+			AVQuery<AVObject> query1 = relation.getQuery();
+			List<AVObject> list = query1.find();
+			for (AVObject user : list) {
+				if (user.getObjectId().equals(HereApplication.currentUser.getObjectId())) {
+					isRegED = true;
+				}
+			}
+			LogUtil.e("reged",isRegED+"");
+			return isRegED;
+		} catch (AVException e) {
+
+		}
+		return isRegED;
 	}
 }

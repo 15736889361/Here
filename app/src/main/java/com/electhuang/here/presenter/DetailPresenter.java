@@ -19,6 +19,12 @@ public class DetailPresenter implements IDetailPresenter {
 		this.listener = listener;
 	}
 
+	@Override
+	public boolean isRegED(Course currentCourse) {
+		boolean regED = detailModel.isRegED(currentCourse);
+		return regED;
+	}
+
 	public void onRegListener(Exception e) {
 		listener.regListener(e);
 	}

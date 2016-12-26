@@ -1,16 +1,15 @@
 package com.electhuang.here.model;
 
 import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.baidu.location.BDLocation;
-import com.electhuang.here.application.HereApplication;
 import com.electhuang.here.beans.Course;
 import com.electhuang.here.beans.Registration;
 import com.electhuang.here.model.imodelbind.IRegSwitchModel;
 import com.electhuang.here.presenter.RegSwitchPresenter;
 import com.electhuang.here.utils.LogUtil;
-import com.electhuang.here.utils.SpUtil;
 import com.electhuang.here.utils.Utils;
 
 /**
@@ -41,9 +40,7 @@ public class RegSwitchModel implements IRegSwitchModel {
 						@Override
 						public void done(AVException e) {
 							if (e == null) {
-								String objectId = registration.getObjectId();
-								//把该课程的最新一次签到的objectId保存起来
-								SpUtil.putString(HereApplication.getContext(), "latestRegistrationId-"+currentCourse.getObjectId(), objectId);
+
 							} else {
 
 							}
@@ -65,15 +62,22 @@ public class RegSwitchModel implements IRegSwitchModel {
 			@Override
 			public void done(AVException e) {
 				if (e == null) {
-					String registrationId = SpUtil.getString(HereApplication.getContext(), "latestRegistrationId-"+currentCourse.getObjectId(), null);
-					try {
-						Registration registration = AVObject.createWithoutData(Registration.class, registrationId);
-						String stopTime = Utils.getCurrentTime();
-						registration.setStopTime(stopTime);
-						registration.saveInBackground();
-						regSwitchPresenter.stopSucceed();
-					} catch (AVException e1) {
-					}
+					AVQuery<Registration> query = new AVQuery<>("Registration");
+					query.whereEqualTo("pertain", currentCourse);
+					query.getFirstInBackground(new GetCallback<Registration>() {
+						@Override
+						public void done(Registration registration, AVException e) {
+							if (e == null) {
+								String stopTime = Utils.getCurrentTime();
+								registration.setStopTime(stopTime);
+								registration.saveInBackground();
+								regSwitchPresenter.stopSucceed();
+							}
+							else {
+								LogUtil.e(getClass(), e.toString());
+							}
+						}
+					});
 				} else {
 					regSwitchPresenter.stopFail();
 				}
@@ -83,7 +87,6 @@ public class RegSwitchModel implements IRegSwitchModel {
 
 	@Override
 	public boolean isRegNow(Course course) {
-		//boolean isRegNow = (boolean) course.get("isRegNow");
 		boolean isRegNow = course.isRegNow();
 		LogUtil.e(RegSwitchModel.class, "是否处于签到状态：" + isRegNow);
 		return isRegNow;

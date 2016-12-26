@@ -14,6 +14,14 @@ public interface IDetailPresenter {
 	 */
 	void reg(Course currentCourse,OnRegListener listener);
 
+	/**
+	 * 判断是否已经签到成功
+	 *
+	 * @param currentCourse
+	 * @return
+	 */
+	boolean isRegED(Course currentCourse);
+
 	interface OnRegListener {
 
 		void regListener(Exception e);

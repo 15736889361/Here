@@ -81,6 +81,29 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 		//初始化签到的正确地点
 		initRegAddress();
 
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				boolean regED = detailPresenter.isRegED(currentCourse);
+				LogUtil.e("reged",regED+"");
+				if (!regED) {
+					compareDistance();
+				} else {
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							tv_distance_error.setVisibility(View.INVISIBLE);
+							btn_reg.setText("已签到");
+							btn_reg.setEnabled(false);
+						}
+					});
+				}
+			}
+		}).start();
+
+	}
+
+	private void compareDistance() {
 		//创建一个任务定时器，监听用户当前坐标点与签到点的距离
 		myTimer = new Timer();
 		myTimer.schedule(new TimerTask() {

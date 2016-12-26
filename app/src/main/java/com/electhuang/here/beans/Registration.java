@@ -3,15 +3,7 @@ package com.electhuang.here.beans;
 import android.os.Parcel;
 
 import com.avos.avoscloud.AVClassName;
-import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
-import com.avos.avoscloud.AVQuery;
-import com.avos.avoscloud.AVRelation;
-import com.avos.avoscloud.AVUser;
-import com.avos.avoscloud.SaveCallback;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by elecdog on 2016/12/22.
@@ -54,7 +46,7 @@ public class Registration extends AVObject {
 		put("pertain", pertain);
 	}
 
-	public List<AVUser> regSucceeds() {
+	/*public List<AVUser> regSucceeds() {
 		AVRelation<AVObject> relation = getRelation("regs");
 		AVQuery<AVObject> query = relation.getQuery();
 		List<AVUser> regSucceeds = new ArrayList<>();
@@ -82,5 +74,5 @@ public class Registration extends AVObject {
 				}
 			}
 		});
-	}
+	}*/
 }
