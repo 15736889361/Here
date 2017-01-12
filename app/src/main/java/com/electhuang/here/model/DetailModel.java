@@ -28,10 +28,33 @@ public class DetailModel implements IDetailModel {
 	}
 
 	@Override
+	public boolean isRegED(Course currentCourse) {
+		AVQuery<Registration> query = new AVQuery<>("Registration");
+		query.whereEqualTo("pertain", currentCourse);
+		query.orderByDescending("createdAt");
+		try {
+			Registration registration = query.getFirst();
+			AVRelation<AVObject> relation = registration.getRelation("regs");
+			AVQuery<AVObject> query1 = relation.getQuery();
+			List<AVObject> list = query1.find();
+			for (AVObject user : list) {
+				if (user.getObjectId().equals(HereApplication.currentUser.getObjectId())) {
+					isRegED = true;
+				}
+			}
+			LogUtil.e("reged",isRegED+"");
+			return isRegED;
+		} catch (AVException e) {
+
+		}
+		return isRegED;
+	}
+
+	@Override
 	public void reg(Course currentCourse) {
 		AVQuery<Registration> query = new AVQuery<>("Registration");
 		query.whereEqualTo("pertain", currentCourse);
-		//query.orderByDescending("createAt");
+		query.orderByDescending("createAt");
 		query.getFirstInBackground(new GetCallback<Registration>() {
 			@Override
 			public void done(Registration registration, AVException e) {
@@ -51,27 +74,5 @@ public class DetailModel implements IDetailModel {
 				}
 			}
 		});
-	}
-
-	@Override
-	public boolean isRegED(Course currentCourse) {
-		AVQuery<Registration> query = new AVQuery<>("Registration");
-		query.whereEqualTo("pertain", currentCourse);
-		try {
-			Registration registration = query.getFirst();
-			AVRelation<AVObject> relation = registration.getRelation("regs");
-			AVQuery<AVObject> query1 = relation.getQuery();
-			List<AVObject> list = query1.find();
-			for (AVObject user : list) {
-				if (user.getObjectId().equals(HereApplication.currentUser.getObjectId())) {
-					isRegED = true;
-				}
-			}
-			LogUtil.e("reged",isRegED+"");
-			return isRegED;
-		} catch (AVException e) {
-
-		}
-		return isRegED;
 	}
 }

@@ -194,6 +194,7 @@ public class CreateCourseActivity extends BaseActivity implements ICreateCourseA
 						@Override
 						public void onCreateCourseSuccess() {
 							Toast.makeText(getApplicationContext(), R.string.succeed, Toast.LENGTH_SHORT).show();
+							setResult(RESULT_OK);
 							CreateCourseActivity.this.finish();
 						}
 

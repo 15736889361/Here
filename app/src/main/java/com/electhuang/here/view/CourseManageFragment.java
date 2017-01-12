@@ -1,5 +1,6 @@
 package com.electhuang.here.view;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import com.electhuang.here.R;
 import com.electhuang.here.adapter.CourseManageRecyclerViewAdapter;
 import com.electhuang.here.beans.Course;
 import com.electhuang.here.presenter.CourseManagePresenter;
+import com.electhuang.here.utils.LogUtil;
 import com.electhuang.here.view.iviewbind.BaseFragment;
 
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import java.util.List;
  */
 public class CourseManageFragment extends BaseFragment implements View.OnClickListener {
 
+	private static final int CREATE_COURSE = 10;
 	private CourseManagePresenter courseManagePresenter = new CourseManagePresenter();
 	private List<Course> mCourseList = new ArrayList<>();
 	private CourseManageRecyclerViewAdapter adapter;
@@ -58,6 +61,7 @@ public class CourseManageFragment extends BaseFragment implements View.OnClickLi
 			public void run() {
 				List<Course> courseList = courseManagePresenter.queryCurrentUserCourse();
 				mCourseList.addAll(courseList);
+				LogUtil.e(getClass(), mCourseList.size() + "");
 				getActivity().runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
@@ -69,11 +73,25 @@ public class CourseManageFragment extends BaseFragment implements View.OnClickLi
 	}
 
 	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == CREATE_COURSE) {
+			switch (resultCode) {
+				case Activity.RESULT_OK:
+					LogUtil.e(getClass(), "" + Activity.RESULT_OK);
+					mCourseList.clear();
+					setList();
+					break;
+			}
+		}
+	}
+
+	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.cardView_create:
 				Intent intent = new Intent(getActivity(), CreateCourseActivity.class);
-				startActivity(intent);
+				startActivityForResult(intent, CREATE_COURSE);
 				break;
 		}
 	}

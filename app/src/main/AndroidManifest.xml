@@ -76,6 +76,10 @@
             android:name=".view.RegSwitchActivity"
             android:screenOrientation="portrait">
         </activity>
+        <activity android:name=".view.CheckRecordActivity">
+        </activity>
+        <activity android:name=".view.ReadFollowersActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -25,6 +25,7 @@ public class CourseManageModel implements ICourseManageModel {
 		courseQuery.whereEqualTo("creator", currentUser);
 		try {
 			List<AVObject> list = courseQuery.find();
+			courseList.clear();
 			for (AVObject course : list) {
 				courseList.add((Course) course);
 			}

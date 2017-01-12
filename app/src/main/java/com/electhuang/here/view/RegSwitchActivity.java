@@ -31,13 +31,14 @@ public class RegSwitchActivity extends BaseActivity implements View.OnClickListe
 	private IRegSwitchPresenter regSwitchPresenter = new RegSwitchPresenter();
 	private Button btn_start_reg;
 	private Button btn_stop_reg;
+	private String currentCourseString;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_reg_switch);
 		Intent intent = getIntent();
-		String currentCourseString = intent.getStringExtra("currentCourse");
+		currentCourseString = intent.getStringExtra("currentCourse");
 		try {
 			currentCourse = (Course) Course.parseAVObject(currentCourseString);
 			LogUtil.e("TAG", "---currentCourse:" + currentCourse);
@@ -154,8 +155,14 @@ public class RegSwitchActivity extends BaseActivity implements View.OnClickListe
 				});
 				break;
 			case R.id.btn_record:
+				Intent intent = new Intent(this, CheckRecordActivity.class);
+				intent.putExtra("currentCourse", currentCourseString);
+				startActivity(intent);
 				break;
 			case R.id.btn_read_followers:
+				Intent readFollowersIntent = new Intent(this, ReadFollowersActivity.class);
+				readFollowersIntent.putExtra("currentCourse", currentCourseString);
+				startActivity(readFollowersIntent);
 				break;
 		}
 	}
