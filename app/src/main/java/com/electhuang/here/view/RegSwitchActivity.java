@@ -123,6 +123,11 @@ public class RegSwitchActivity extends BaseActivity implements View.OnClickListe
 	}
 
 	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.btn_start_reg:
