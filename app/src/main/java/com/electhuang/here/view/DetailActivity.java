@@ -2,6 +2,7 @@ package com.electhuang.here.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
@@ -36,6 +37,7 @@ import java.util.TimerTask;
 
 public class DetailActivity extends BaseActivity implements View.OnClickListener {
 
+	private static final int FACE_VERIFY_REQUEST = 10;
 	//private static final int SDK_PERMISSION_REQUEST = 100;
 	private MapView mapView = null;
 	private BaiduMap baiduMap;
@@ -51,6 +53,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//SuperID.initFaceSDK(this);
 		setContentView(R.layout.activity_detail);
 		Intent intent = getIntent();
 		String serializedString = intent.getStringExtra("currentCourse");
@@ -85,7 +88,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 			@Override
 			public void run() {
 				boolean regED = detailPresenter.isRegED(currentCourse);
-				LogUtil.e("reged",regED+"");
+				LogUtil.e("reged", regED + "");
 				if (!regED) {
 					compareDistance();
 				} else {
@@ -216,7 +219,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.btn_reg:
-				detailPresenter.reg(currentCourse, new IDetailPresenter.OnRegListener() {
+				/*detailPresenter.reg(currentCourse, new IDetailPresenter.OnRegListener() {
 					@Override
 					public void regListener(Exception e) {
 						if (e == null) {
@@ -230,8 +233,25 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 							Toast.makeText(DetailActivity.this, "签到失败", Toast.LENGTH_SHORT).show();
 						}
 					}
-				});
+				});*/
+				//SuperID.faceLogin(this);
+				if (checkCameraHardware(this)) {
+					Intent intent = new Intent(this, FaceVerifyActivity.class);
+					startActivityForResult(intent, FACE_VERIFY_REQUEST);
+				} else {
+					Toast.makeText(this, "该设备没有摄像头，请人工签到", Toast.LENGTH_SHORT).show();
+				}
 				break;
+		}
+	}
+
+	private boolean checkCameraHardware(Context context) {
+		if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+			// this device has a camera
+			return true;
+		} else {
+			// no camera on this device
+			return false;
 		}
 	}
 }

@@ -20,16 +20,18 @@ public class InfoDialog extends Dialog implements View.OnClickListener {
 
 	private OnInfoDialogListener listener;
 	private String currentCourse;
+	private String creator;
 	private boolean regAble, isAdded;
 	private Course course;
 	private final View view;
 
-	public InfoDialog(Activity context, String currentCourse, boolean regAble, OnInfoDialogListener listener) {
+	public InfoDialog(Activity context, String currentCourse, String creator, boolean regAble, OnInfoDialogListener listener) {
 		//super(context, R.style.Dialog);
 		super(context);
 		setTitle("详细信息");
 		this.listener = listener;
 		this.currentCourse = currentCourse;
+		this.creator = creator;
 		this.regAble = regAble;
 		view = LayoutInflater.from(context).inflate(R.layout.dialog_info, null, false);
 		setContentView(view);
@@ -70,7 +72,7 @@ public class InfoDialog extends Dialog implements View.OnClickListener {
 		String course_time = course.getCourse_time();
 		String course_date = course.getCourse_date();
 		String description = course.getDescription();
-		String creator = course.getCreator().getUsername();
+		//String creator = course.getCreator().getUsername();
 		boolean isRegNow = course.isRegNow();
 
 		tv_course_name.setText(courseName);

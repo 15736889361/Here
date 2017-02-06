@@ -21,8 +21,8 @@ import java.util.List;
 /**
  * Created by elecdog on 2016/11/20.
  */
-public class RegistrationFragmentRecyclerViewAdapter extends RecyclerView
-		.Adapter<RegistrationFragmentRecyclerViewAdapter.ViewHolder> {
+public class RegistrationFragmentRecyclerViewAdapter extends RecyclerView.Adapter<RegistrationFragmentRecyclerViewAdapter
+		.ViewHolder> {
 
 	private List<Course> courseList;
 	private Activity mActivity;
@@ -74,14 +74,15 @@ public class RegistrationFragmentRecyclerViewAdapter extends RecyclerView
 				@Override
 				public void onClick(View view) {
 					final Course currentCourse = courseList.get(getLayoutPosition());
+					final String username = currentCourse.getCreator().getUsername();
 					//先同步云端数据，防止签到状态没有更新
 					//String key = "isRegNow";
 					currentCourse.refreshInBackground(new RefreshCallback<AVObject>() {
 						@Override
 						public void done(AVObject avObject, AVException e) {
 							final Course course = (Course) avObject;
-							final String serializedString =   course.toString();
-							new InfoDialog(mActivity, serializedString, true, new InfoDialog.OnInfoDialogListener() {
+							final String serializedString = course.toString();
+							new InfoDialog(mActivity, serializedString, username, true, new InfoDialog.OnInfoDialogListener() {
 								@Override
 								public void click() {
 									//Toast.makeText(mActivity, "签到", Toast.LENGTH_SHORT).show();
