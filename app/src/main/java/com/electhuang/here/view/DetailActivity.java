@@ -27,6 +27,8 @@ import com.electhuang.here.presenter.DetailPresenter;
 import com.electhuang.here.presenter.ipresenterbind.IDetailPresenter;
 import com.electhuang.here.utils.LocationUtil;
 import com.electhuang.here.utils.LogUtil;
+import com.isnc.facesdk.SuperID;
+import com.isnc.facesdk.common.SDKConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,6 +68,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 		}
 		//getPermissions();
 		initView();
+		SuperID.initFaceSDK(this);
 	}
 
 	private void initView() {
@@ -216,6 +219,31 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.btn_reg:
+				SuperID.faceLogin(this);
+				/*detailPresenter.reg(currentCourse, new IDetailPresenter.OnRegListener() {
+					@Override
+					public void regListener(Exception e) {
+						if (e == null) {
+							Toast.makeText(DetailActivity.this, "签到成功", Toast.LENGTH_SHORT).show();
+							btn_reg.setText("已签到");
+							btn_reg.setEnabled(false);
+							if (myTimer != null) {
+								myTimer.cancel();
+							}
+						} else {
+							Toast.makeText(DetailActivity.this, "签到失败", Toast.LENGTH_SHORT).show();
+						}
+					}
+				});*/
+				break;
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (resultCode) {
+			case SDKConfig.LOGINSUCCESS:
 				detailPresenter.reg(currentCourse, new IDetailPresenter.OnRegListener() {
 					@Override
 					public void regListener(Exception e) {
