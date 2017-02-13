@@ -69,6 +69,35 @@ public class SpUtil {
 	}
 
 	/**
+	 * 写入Int变量值SharePreferences中
+	 *
+	 * @param context 上下文环境
+	 * @param key     存储节点的名称
+	 * @param value   存储节点的值
+	 */
+	public static void putInt(Context context, String key, Integer value) {
+		if (sharedPreferences == null) {
+			sharedPreferences = context.getSharedPreferences("settingValue", Context.MODE_PRIVATE);
+		}
+		sharedPreferences.edit().putInt(key, value).apply();
+	}
+
+	/**
+	 * 根据key获取相应的int变量
+	 *
+	 * @param context  上下文环境
+	 * @param key      存储节点的名称
+	 * @param defValue 如果没有取值成功需要返回的默认值
+	 * @return 返回一个String变量
+	 */
+	public static int getInt(Context context, String key, Integer defValue) {
+		if (sharedPreferences == null) {
+			sharedPreferences = context.getSharedPreferences("settingValue", Context.MODE_PRIVATE);
+		}
+		return sharedPreferences.getInt(key, defValue);
+	}
+
+	/**
 	 * 删除指定key的节点
 	 *
 	 * @param context   上下文环境

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="UserInfoItemView">
+        <attr name="item_background_color" format="color"/>
+        <attr name="icon_visible">
+            <enum name="gone" value="-1"/>
+            <enum name="visible" value="1"/>
+            <enum name="invisible" value="0"/>
+        </attr>
+        <attr name="text_visible" format="boolean"/>
+        <attr name="line_top_visible" format="boolean"/>
+        <attr name="line_bottom_visible" format="boolean"/>
+        <attr name="icon_drawable" format="reference|integer"/>
+        <attr name="info_text" format="string"/>
+        <attr name="info_text_color" format="color"/>
+        <attr name="info_detail" format="string"/>
+        <attr name="info_detail_color" format="color"/>
+        <attr name="info_detail_drawable" format="reference|integer"/>
+        <!--<attr name="line_top_marginLeft" format="dimension"/>-->
+        <!--<attr name="line_top_marginRight" format="dimension"/>-->
+        <attr name="line_top_color" format="color"/>
+        <!--<attr name="line_bottom_marginLeft" format="dimension"/>-->
+        <!--<attr name="line_bottom_marginRight" format="dimension"/>-->
+        <attr name="line_bottom_color" format="color"/>
+    </declare-styleable>
+</resources>

@@ -1,0 +1,102 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:here="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@color/backgroundColor"
+             tools:context=".view.AccountFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/info_basic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/iv_avatar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/avatar"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="username"
+                    android:textSize="23sp"/>
+
+                <TextView
+                    android:id="@+id/tv_phoneNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="phoneNumber"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <com.electhuang.here.view.custom.InfoItemView
+            android:id="@+id/info_position"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="17dp"
+            here:icon_visible="gone"
+            here:info_detail="学生"
+            here:info_text="身份"
+            here:line_bottom_visible="true"
+            here:line_top_visible="false"/>
+
+        <com.electhuang.here.view.custom.InfoItemView
+            android:id="@+id/info_sex"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            here:icon_visible="gone"
+            here:info_detail="男"
+            here:info_text="性别"
+            here:line_bottom_visible="true"
+            here:line_top_visible="false"/>
+
+        <com.electhuang.here.view.custom.InfoItemView
+            android:id="@+id/info_mail"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            here:icon_visible="gone"
+            here:info_detail="未设置"
+            here:info_text="邮箱"
+            here:line_bottom_visible="false"
+            here:line_top_visible="false"/>
+
+        <com.electhuang.here.view.custom.InfoItemView
+            android:id="@+id/info_school"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="17dp"
+            here:icon_visible="gone"
+            here:info_detail="未设置"
+            here:info_text="学校"
+            here:line_top_visible="false"/>
+
+        <com.electhuang.here.view.custom.InfoItemView
+            android:id="@+id/info_school_number"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            here:icon_visible="gone"
+            here:info_detail="未设置"
+            here:info_text="学号/教工号"
+            here:line_bottom_visible="false"
+            here:line_top_visible="false"/>
+    </LinearLayout>
+</FrameLayout>

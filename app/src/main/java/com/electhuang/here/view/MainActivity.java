@@ -44,7 +44,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 	private RegistrationFragment registrationFragment;
 	private FragmentManager fragmentManager;
 	private CourseManageFragment courseManageFragment;
-	private SettingFragment settingFragment;
+	private AccountFragment accountFragment;
 	private Fragment currentFragment;//标志内容区当前显示的Fragment
 	private IMainPresenter mainPresenter = new MainPresenter(this);
 	private Toolbar toolbar;
@@ -139,7 +139,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 	private void initContent() {
 		registrationFragment = new RegistrationFragment();
 		courseManageFragment = new CourseManageFragment();
-		settingFragment = new SettingFragment();
+		accountFragment = new AccountFragment();
 		if (fragmentManager == null) {
 			fragmentManager = getSupportFragmentManager();
 		}
@@ -176,9 +176,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 						break;
 					case R.id.setting:
 						if (registrationFragment == null) {
-							settingFragment = new SettingFragment();
+							accountFragment = new AccountFragment();
 						}
-						switchContent(settingFragment);
+						switchContent(accountFragment);
 						toolbar.setTitle("设置");
 						break;
 				}
@@ -274,9 +274,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 			toolbar.setTitle("添加签到");
 		} else if (id == R.id.setting) {
 			if (registrationFragment == null) {
-				settingFragment = new SettingFragment();
+				accountFragment = new AccountFragment();
 			}
-			switchContent(settingFragment);
+			switchContent(accountFragment);
 			toolbar.setTitle("设置");
 		} else if (id == R.id.nav_share) {
 
