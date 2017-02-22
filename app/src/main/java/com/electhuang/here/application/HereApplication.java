@@ -26,6 +26,7 @@ public class HereApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+
 		SDKInitializer.initialize(getApplicationContext());
 		//子类化Course
 		AVObject.registerSubclass(Course.class);

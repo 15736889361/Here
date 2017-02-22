@@ -82,7 +82,9 @@
             android:name=".view.CreateCourseActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".view.DetailActivity">
+        <activity
+            android:name=".view.DetailActivity"
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".view.iviewbind.ManageCourseActivity">
         </activity>
@@ -154,7 +156,10 @@
             android:theme="@android:style/Theme.Holo.Light.NoActionBar">
         </activity>
         <activity
-            android:name=".view.FaceVerifyActivity">
+            android:name=".view.FaceVerifyActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".view.InitFaceActivity">
         </activity>
     </application>
 

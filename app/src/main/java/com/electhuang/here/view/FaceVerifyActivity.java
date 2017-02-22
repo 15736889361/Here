@@ -1,5 +1,7 @@
 package com.electhuang.here.view;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Environment;
@@ -11,11 +13,15 @@ import android.widget.FrameLayout;
 
 import com.electhuang.here.R;
 import com.electhuang.here.application.HereApplication;
+import com.youtu.Youtu;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -23,11 +29,17 @@ public class FaceVerifyActivity extends AppCompatActivity {
 
 	public static final int MEDIA_TYPE_IMAGE = 1;
 	public static final int MEDIA_TYPE_VIDEO = 2;
+	private boolean isFirst = true;
+	public static final String APP_ID = "10009379";
+	public static final String SECRET_ID = "AKIDrvoV0IJMDrRqBQ5daNzQi1DD1f7NvVJz";
+	public static final String SECRET_KEY = "c6OUOAlAQXSFqV2XyGMFwQktqeTFsJfp";
 	private Camera mCamera;
 	private Camera.PictureCallback mPictureCallback = new Camera.PictureCallback() {
 		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {
-			File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+			Bitmap bitmapA = BitmapFactory.decodeByteArray(data, 0, data.length);
+			faceCompare(bitmapA);
+			/*File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
 			if (pictureFile == null) {
 				return;
 			}
@@ -36,21 +48,55 @@ public class FaceVerifyActivity extends AppCompatActivity {
 				FileOutputStream fos = new FileOutputStream(pictureFile);
 				fos.write(data);
 				fos.close();
+				mCamera.stopPreview();
+				mCamera.startPreview();
 			} catch (FileNotFoundException e) {
 
 			} catch (IOException e) {
 
-			}
+			}*/
 		}
 	};
+
+	private void faceCompare(final Bitmap bitmapA) {
+		final Bitmap bitmapB = BitmapFactory.decodeResource(getResources(), R.drawable.b);
+		final Bitmap bitmapC = BitmapFactory.decodeResource(getResources(), R.drawable.c);
+		Log.d("TAG", bitmapB.getWidth() + "-B-" + bitmapB.getHeight());
+		Log.d("TAG", bitmapA.getWidth() + "-A-" + bitmapA.getHeight());
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Youtu youtu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, Youtu.API_YOUTU_END_POINT);
+				try {
+					JSONObject respone = youtu.FaceCompare(bitmapC, bitmapB);
+					Log.d("TAG", respone.toString());
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (JSONException e) {
+					e.printStackTrace();
+				} catch (KeyManagementException e) {
+					e.printStackTrace();
+				} catch (NoSuchAlgorithmException e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		//隐藏状态栏
+		View decorView = getWindow().getDecorView();
+		int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+		decorView.setSystemUiVisibility(uiOptions);
+
 		setContentView(R.layout.activity_face_verify);
 		mCamera = getCameraInstance();
-
-		initView();
+		if (mCamera != null) {
+			initView();
+		}
 	}
 
 	private void initView() {
@@ -61,9 +107,25 @@ public class FaceVerifyActivity extends AppCompatActivity {
 		btn_capture.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
+				//mCamera.autoFocus(new Camera.AutoFocusCallback() {
+				//	@Override
+				//	public void onAutoFocus(boolean b, Camera camera) {
+				//		if (camera != null) {
 				mCamera.takePicture(null, null, mPictureCallback);
+				//		}
+				//	}
+				//});
 			}
 		});
+	}
+
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		if (hasFocus && isFirst) {
+			isFirst = false;
+			mCamera.takePicture(null, null, mPictureCallback);
+		}
 	}
 
 	/**
@@ -106,10 +168,16 @@ public class FaceVerifyActivity extends AppCompatActivity {
 
 	public static Camera getCameraInstance() {
 		Camera camera = null;
-		try {
-			camera = Camera.open(); // attempt to get a Camera instance
-		} catch (Exception e) {
-			// Camera is not available (in use or does not exist)
+		Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+		for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
+			Camera.getCameraInfo(i, cameraInfo);
+			if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+				try {
+					camera = Camera.open(i);
+				} catch (Exception e) {
+					camera = null;
+				}
+			}
 		}
 		return camera; // returns null if camera is unavailable
 	}

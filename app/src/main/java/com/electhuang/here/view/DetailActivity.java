@@ -1,6 +1,8 @@
 package com.electhuang.here.view;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
@@ -23,6 +25,7 @@ import com.baidu.mapapi.map.Stroke;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.electhuang.here.R;
+import com.electhuang.here.application.HereApplication;
 import com.electhuang.here.beans.Course;
 import com.electhuang.here.presenter.DetailPresenter;
 import com.electhuang.here.presenter.ipresenterbind.IDetailPresenter;
@@ -235,6 +238,29 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 					}
 				});*/
 				//SuperID.faceLogin(this);
+				Boolean faceVerify = (Boolean) HereApplication.currentUser.get("faceVerify");
+				if (faceVerify == null) {
+					faceVerify = false;
+				}
+				if (!faceVerify) {
+					new AlertDialog.Builder(mActivity)
+							.setTitle("提示")
+							.setMessage("你还没有设置人脸认证，是否马上设置")
+							.setNegativeButton("不了", new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialogInterface, int i) {
+
+								}
+							})
+							.setPositiveButton("好的", new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialogInterface, int i) {
+									Intent intent = new Intent(mActivity, InitFaceActivity.class);
+									startActivity(intent);
+								}
+							}).show();
+					return;
+				}
 				if (checkCameraHardware(this)) {
 					Intent intent = new Intent(this, FaceVerifyActivity.class);
 					startActivityForResult(intent, FACE_VERIFY_REQUEST);
