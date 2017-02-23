@@ -64,6 +64,7 @@ public class RegSwitchModel implements IRegSwitchModel {
 				if (e == null) {
 					AVQuery<Registration> query = new AVQuery<>("Registration");
 					query.whereEqualTo("pertain", currentCourse);
+					query.orderByDescending("createAt");
 					query.getFirstInBackground(new GetCallback<Registration>() {
 						@Override
 						public void done(Registration registration, AVException e) {

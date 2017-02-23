@@ -147,7 +147,7 @@ public class FaceVerifyActivity extends AppCompatActivity {
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
-		if (hasFocus && isFirst) {
+		if (hasFocus && isFirst && mCamera != null) {
 			isFirst = false;
 			mHandler.postDelayed(new Runnable() {
 				@Override

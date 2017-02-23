@@ -74,7 +74,7 @@ public class ModifyInfoDialog extends Dialog implements View.OnClickListener {
 				et_modify_content.setText(school);
 				break;
 			case MODIFY_SCHOOL_NUMBER:
-				tv_modify_title.setText("修改邮箱");
+				tv_modify_title.setText("修改编号");
 				String schoolNumber = (String) HereApplication.currentUser.get("schoolNumber");
 				et_modify_content.setText(schoolNumber);
 				break;

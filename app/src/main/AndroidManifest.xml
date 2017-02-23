@@ -46,12 +46,12 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="Aotfv47SGDAa6ALanrmpv8uU"/>
-        <meta-data
+        <!--<meta-data
             android:name="SUPERID_APPKEY"
             android:value="bb8a63ed63fc28da526dabee"/>
         <meta-data
             android:name="SUPERID_SECRET"
-            android:value="0cf66e18f85de2ea70bdf141"/>
+            android:value="0cf66e18f85de2ea70bdf141"/>-->
 
         <activity android:name=".view.BaseActivity">
         </activity>
