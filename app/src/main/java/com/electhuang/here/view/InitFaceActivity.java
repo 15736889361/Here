@@ -8,14 +8,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.SaveCallback;
 import com.electhuang.here.R;
 import com.electhuang.here.application.HereApplication;
 import com.youtu.Youtu;
@@ -35,7 +31,7 @@ public class InitFaceActivity extends AppCompatActivity {
 	private boolean isFirst = true;
 	private int takePicCount = 1;
 	private static final int SUCCESS = 1;
-	private static final int FAILD = 0;
+	private static final int FAIL = 0;
 	public static final String APP_ID = "10009379";
 	public static final String SECRET_ID = "AKIDrvoV0IJMDrRqBQ5daNzQi1DD1f7NvVJz";
 	public static final String SECRET_KEY = "c6OUOAlAQXSFqV2XyGMFwQktqeTFsJfp";
@@ -47,20 +43,11 @@ public class InitFaceActivity extends AppCompatActivity {
 			super.handleMessage(msg);
 			switch (msg.what) {
 				case SUCCESS:
-					Toast.makeText(InitFaceActivity.this, "验证成功", Toast.LENGTH_SHORT).show();
-					HereApplication.currentUser.put("faceVerify", true);
-					HereApplication.currentUser.saveInBackground();
+					setResult(RESULT_OK);
 					finish();
 					break;
-				case FAILD:
-					Toast.makeText(InitFaceActivity.this, "验证失败，请重新尝试", Toast.LENGTH_SHORT).show();
-					HereApplication.currentUser.put("faceVerify", false);
-					HereApplication.currentUser.saveInBackground(new SaveCallback() {
-						@Override
-						public void done(AVException e) {
-							Log.d("TAG", e.toString());
-						}
-					});
+				case FAIL:
+					setResult(RESULT_CANCELED);
 					finish();
 					break;
 			}
@@ -100,7 +87,7 @@ public class InitFaceActivity extends AppCompatActivity {
 				public void run() {
 					mCamera.takePicture(null, null, mPictureCallback);
 				}
-			}, 500);
+			}, 1000);
 		}
 	}
 
@@ -112,11 +99,14 @@ public class InitFaceActivity extends AppCompatActivity {
 			ll_tip.setVisibility(View.VISIBLE);
 
 			bitmapA = BitmapFactory.decodeByteArray(data, 0, data.length);
+			if (bitmapA == null) {
+				return;
+			}
 			int width = bitmapA.getWidth();
 			int height = bitmapA.getHeight();
-			if (width > 720 || height > 720) {
+			if (width > 360 || height > 360) {
 				Matrix matrix = new Matrix();
-				matrix.postScale((float) 0.5, (float) 0.5);
+				matrix.postScale((float) 0.25, (float) 0.25);
 				bitmapA = Bitmap.createBitmap(bitmapA, 0, 0, width, height, matrix, true);
 			}
 			new Thread(new Runnable() {
@@ -128,7 +118,6 @@ public class InitFaceActivity extends AppCompatActivity {
 						List<String> group_ids = new ArrayList<>();
 						group_ids.add("here");
 						JSONObject respose = youtu.NewPerson(bitmapA, persion_id, group_ids);
-						Log.d("TAG", respose.toString());
 						runOnUiThread(new Runnable() {
 							@Override
 							public void run() {
@@ -138,7 +127,7 @@ public class InitFaceActivity extends AppCompatActivity {
 						int errorcode = respose.getInt("errorcode");
 						if (errorcode != 0) {
 							if (takePicCount >= 3) {
-								mHandler.sendEmptyMessage(FAILD);
+								mHandler.sendEmptyMessage(FAIL);
 								return;
 							}
 							mCamera.takePicture(null, null, mPictureCallback);

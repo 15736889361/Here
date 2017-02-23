@@ -2,14 +2,17 @@ package com.electhuang.here.view;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.electhuang.here.R;
 import com.electhuang.here.application.HereApplication;
@@ -29,47 +32,82 @@ public class FaceVerifyActivity extends AppCompatActivity {
 
 	public static final int MEDIA_TYPE_IMAGE = 1;
 	public static final int MEDIA_TYPE_VIDEO = 2;
+	public static final int SUCCESS = 1;
+	public static final int FAIL = 0;
 	private boolean isFirst = true;
+	int takePicCount = 1;
 	public static final String APP_ID = "10009379";
 	public static final String SECRET_ID = "AKIDrvoV0IJMDrRqBQ5daNzQi1DD1f7NvVJz";
 	public static final String SECRET_KEY = "c6OUOAlAQXSFqV2XyGMFwQktqeTFsJfp";
 	private Camera mCamera;
-	private Camera.PictureCallback mPictureCallback = new Camera.PictureCallback() {
+	private Bitmap bitmapA;
+
+	Handler mHandler = new Handler() {
 		@Override
-		public void onPictureTaken(byte[] data, Camera camera) {
-			Bitmap bitmapA = BitmapFactory.decodeByteArray(data, 0, data.length);
-			faceCompare(bitmapA);
-			/*File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-			if (pictureFile == null) {
-				return;
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			switch (msg.what) {
+				case SUCCESS:
+					setResult(RESULT_OK);
+					finish();
+					break;
+				case FAIL:
+					setResult(RESULT_CANCELED);
+					finish();
+					break;
 			}
-
-			try {
-				FileOutputStream fos = new FileOutputStream(pictureFile);
-				fos.write(data);
-				fos.close();
-				mCamera.stopPreview();
-				mCamera.startPreview();
-			} catch (FileNotFoundException e) {
-
-			} catch (IOException e) {
-
-			}*/
 		}
 	};
 
-	private void faceCompare(final Bitmap bitmapA) {
-		final Bitmap bitmapB = BitmapFactory.decodeResource(getResources(), R.drawable.b);
-		final Bitmap bitmapC = BitmapFactory.decodeResource(getResources(), R.drawable.c);
-		Log.d("TAG", bitmapB.getWidth() + "-B-" + bitmapB.getHeight());
-		Log.d("TAG", bitmapA.getWidth() + "-A-" + bitmapA.getHeight());
+	private Camera.PictureCallback mPictureCallback = new Camera.PictureCallback() {
+		@Override
+		public void onPictureTaken(byte[] data, Camera camera) {
+			mCamera.stopPreview();
+			mCamera.startPreview();
+			ll_tip.setVisibility(View.VISIBLE);
+
+			bitmapA = BitmapFactory.decodeByteArray(data, 0, data.length);
+			if (bitmapA != null) {
+				faceVerify();
+			}
+		}
+	};
+	private LinearLayout ll_tip;
+
+	private void faceVerify() {
+		int width = bitmapA.getWidth();
+		int height = bitmapA.getHeight();
+		if (width > 360 || height > 360) {
+			Matrix matrix = new Matrix();
+			matrix.postScale((float) 0.25, (float) 0.25);
+			bitmapA = Bitmap.createBitmap(bitmapA, 0, 0, width, height, matrix, true);
+		}
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				Youtu youtu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, Youtu.API_YOUTU_END_POINT);
+				String persion_id = HereApplication.currentUser.getMobilePhoneNumber();
 				try {
-					JSONObject respone = youtu.FaceCompare(bitmapC, bitmapB);
-					Log.d("TAG", respone.toString());
+					JSONObject respose = youtu.FaceVerify(bitmapA, persion_id);
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							ll_tip.setVisibility(View.GONE);
+						}
+					});
+					Log.e("TAG", respose.toString());
+					int errorcode = respose.getInt("errorcode");
+					boolean ismatch = respose.getBoolean("ismatch");
+					if (errorcode != 0 || !ismatch) {
+						if (takePicCount >= 3) {
+							mHandler.sendEmptyMessage(FAIL);
+							return;
+						}
+						mCamera.takePicture(null, null, mPictureCallback);
+						takePicCount++;
+					} else {
+						mHandler.sendEmptyMessage(SUCCESS);
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (JSONException e) {
@@ -103,20 +141,7 @@ public class FaceVerifyActivity extends AppCompatActivity {
 		CameraPreview cameraPreview = new CameraPreview(this, mCamera);
 		FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
 		preview.addView(cameraPreview);
-		Button btn_capture = (Button) findViewById(R.id.button_capture);
-		btn_capture.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				//mCamera.autoFocus(new Camera.AutoFocusCallback() {
-				//	@Override
-				//	public void onAutoFocus(boolean b, Camera camera) {
-				//		if (camera != null) {
-				mCamera.takePicture(null, null, mPictureCallback);
-				//		}
-				//	}
-				//});
-			}
-		});
+		ll_tip = (LinearLayout) findViewById(R.id.ll_tip);
 	}
 
 	@Override
@@ -124,7 +149,12 @@ public class FaceVerifyActivity extends AppCompatActivity {
 		super.onWindowFocusChanged(hasFocus);
 		if (hasFocus && isFirst) {
 			isFirst = false;
-			mCamera.takePicture(null, null, mPictureCallback);
+			mHandler.postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					mCamera.takePicture(null, null, mPictureCallback);
+				}
+			}, 1000);
 		}
 	}
 

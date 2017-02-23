@@ -41,7 +41,7 @@ import java.util.TimerTask;
 public class DetailActivity extends BaseActivity implements View.OnClickListener {
 
 	private static final int FACE_VERIFY_REQUEST = 10;
-	//private static final int SDK_PERMISSION_REQUEST = 100;
+	private static final int FACE_INIT_REQUEST = 11;
 	private MapView mapView = null;
 	private BaiduMap baiduMap;
 	private LocationClient locationClient;
@@ -222,22 +222,6 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.btn_reg:
-				/*detailPresenter.reg(currentCourse, new IDetailPresenter.OnRegListener() {
-					@Override
-					public void regListener(Exception e) {
-						if (e == null) {
-							Toast.makeText(DetailActivity.this, "签到成功", Toast.LENGTH_SHORT).show();
-							btn_reg.setText("已签到");
-							btn_reg.setEnabled(false);
-							if (myTimer != null) {
-								myTimer.cancel();
-							}
-						} else {
-							Toast.makeText(DetailActivity.this, "签到失败", Toast.LENGTH_SHORT).show();
-						}
-					}
-				});*/
-				//SuperID.faceLogin(this);
 				Boolean faceVerify = (Boolean) HereApplication.currentUser.get("faceVerify");
 				if (faceVerify == null) {
 					faceVerify = false;
@@ -255,8 +239,10 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 							.setPositiveButton("好的", new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialogInterface, int i) {
-									Intent intent = new Intent(mActivity, InitFaceActivity.class);
-									startActivity(intent);
+									if (checkCameraHardware(DetailActivity.this)) {
+										Intent intent = new Intent(mActivity, InitFaceActivity.class);
+										startActivityForResult(intent, FACE_INIT_REQUEST);
+									}
 								}
 							}).show();
 					return;
@@ -264,8 +250,45 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 				if (checkCameraHardware(this)) {
 					Intent intent = new Intent(this, FaceVerifyActivity.class);
 					startActivityForResult(intent, FACE_VERIFY_REQUEST);
-				} else {
-					Toast.makeText(this, "该设备没有摄像头，请人工签到", Toast.LENGTH_SHORT).show();
+				}
+				break;
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode) {
+			case FACE_INIT_REQUEST:
+				if (RESULT_CANCELED == resultCode) {
+					HereApplication.currentUser.put("faceVerify", true);
+					HereApplication.currentUser.saveInBackground();
+					Toast.makeText(DetailActivity.this, "识别失败，请重新尝试", Toast.LENGTH_SHORT).show();
+				} else if (RESULT_OK == resultCode) {
+					HereApplication.currentUser.put("faceVerify", true);
+					HereApplication.currentUser.saveInBackground();
+					Toast.makeText(DetailActivity.this, "验证成功", Toast.LENGTH_SHORT).show();
+				}
+				break;
+			case FACE_VERIFY_REQUEST:
+				if (RESULT_CANCELED == resultCode) {
+					Toast.makeText(DetailActivity.this, "验证失败，请本人重新尝试", Toast.LENGTH_SHORT).show();
+				} else if (RESULT_OK == resultCode) {
+					detailPresenter.reg(currentCourse, new IDetailPresenter.OnRegListener() {
+						@Override
+						public void regListener(Exception e) {
+							if (e == null) {
+								Toast.makeText(DetailActivity.this, "签到成功", Toast.LENGTH_SHORT).show();
+								btn_reg.setText("已签到");
+								btn_reg.setEnabled(false);
+								if (myTimer != null) {
+									myTimer.cancel();
+								}
+							} else {
+								Toast.makeText(DetailActivity.this, "签到失败", Toast.LENGTH_SHORT).show();
+							}
+						}
+					});
 				}
 				break;
 		}
@@ -276,6 +299,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 			// this device has a camera
 			return true;
 		} else {
+			Toast.makeText(context, "该设备没有摄像头，请人工签到", Toast.LENGTH_SHORT).show();
 			// no camera on this device
 			return false;
 		}
