@@ -23,8 +23,7 @@ import java.util.List;
 /**
  * Created by elecdog on 2016/12/12.
  */
-public class AddCourseActivityRecyclerViewAdapter extends RecyclerView.Adapter<AddCourseActivityRecyclerViewAdapter
-		.ViewHolder> {
+public class AddCourseActivityRecyclerViewAdapter extends RecyclerView.Adapter<AddCourseActivityRecyclerViewAdapter.ViewHolder> {
 
 	private Activity mActivity;
 	private List<Course> courseList;
@@ -76,7 +75,7 @@ public class AddCourseActivityRecyclerViewAdapter extends RecyclerView.Adapter<A
 				public void onClick(View view) {
 					final Course currentCourse = courseList.get(getLayoutPosition());
 					String serializedString = currentCourse.toString();
-					new InfoDialog(mActivity, serializedString, false, new InfoDialog.OnInfoDialogListener() {
+					new InfoDialog(mActivity, serializedString, null, false, new InfoDialog.OnInfoDialogListener() {
 						@Override
 						public void click() {
 							//Toast.makeText(mActivity, "加入", Toast.LENGTH_SHORT).show();

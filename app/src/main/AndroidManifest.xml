@@ -17,16 +17,24 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <!-- 访问网络，网络定位需要上网 -->
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <!-- 开启摄像头 -->
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
-    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
-    <uses-feature android:name="android.hardware.camera.setParameters" android:required="false"/>
-    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera.front"/>
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false"/>
+    <uses-feature
+        android:name="android.hardware.camera.setParameters"
+        android:required="false"/>
+
+    <uses-permission android:name="android.permission.CAMERA"/>
     <!-- 阅读消息 -->
-    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS"/>
     <!-- 接收消息 -->
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <!-- 读写⽂文件 -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
 
     <application
         android:name=".application.HereApplication"
@@ -40,10 +48,10 @@
             android:value="Aotfv47SGDAa6ALanrmpv8uU"/>
         <meta-data
             android:name="SUPERID_APPKEY"
-            android:value="bb8a63ed63fc28da526dabee" />
+            android:value="bb8a63ed63fc28da526dabee"/>
         <meta-data
             android:name="SUPERID_SECRET"
-            android:value="0cf66e18f85de2ea70bdf141" />
+            android:value="0cf66e18f85de2ea70bdf141"/>
 
         <activity android:name=".view.BaseActivity">
         </activity>
@@ -74,7 +82,9 @@
             android:name=".view.CreateCourseActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".view.DetailActivity">
+        <activity
+            android:name=".view.DetailActivity"
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".view.iviewbind.ManageCourseActivity">
         </activity>
@@ -96,7 +106,7 @@
         <activity android:name=".view.ReadFollowersActivity">
         </activity>
 
-        <!--一登-->
+        <!-- 一登刷脸 -->
         <activity
             android:name="com.isnc.facesdk.aty.Aty_FaceDetect"
             android:label="@string/app_name"
@@ -107,7 +117,7 @@
             android:name="com.isnc.facesdk.aty.Aty_NormalFaceDetect"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar">
         </activity>
         <activity
             android:name="com.isnc.facesdk.aty.Aty_AgreeItem"
@@ -144,6 +154,12 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar">
+        </activity>
+        <activity
+            android:name=".view.FaceVerifyActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".view.InitFaceActivity">
         </activity>
     </application>
 
