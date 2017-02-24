@@ -45,7 +45,7 @@ public class ModifyInfoDialog extends Dialog implements View.OnClickListener {
 		int width = wm.getDefaultDisplay().getWidth();
 		Window window = this.getWindow();
 		WindowManager.LayoutParams layoutParams = window.getAttributes();
-		layoutParams.width = width / 5 * 4;
+		layoutParams.width = width / 10 * 9;
 		window.setAttributes(layoutParams);
 		super.show();
 	}

@@ -17,6 +17,7 @@ import com.electhuang.here.R;
 import com.electhuang.here.beans.Course;
 import com.electhuang.here.view.DetailActivity;
 import com.electhuang.here.view.dialog.InfoDialog;
+import com.electhuang.here.view.dialog.ProgressDialog;
 
 import java.util.List;
 
@@ -60,6 +61,7 @@ public class RegistrationFragmentRecyclerViewAdapter extends RecyclerView.Adapte
 
 		private final TextView tv_title, tv_reg_time, tv_reg_address, tv_creator, tv_description;
 		private final TextView tv_reg_date;
+		private ProgressDialog progressDialog;
 
 		public ViewHolder(View itemView) {
 			super(itemView);
@@ -75,6 +77,8 @@ public class RegistrationFragmentRecyclerViewAdapter extends RecyclerView.Adapte
 			itemView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
+					progressDialog = new ProgressDialog(mActivity, R.style.tranDialog);
+					progressDialog.show();
 					final Course currentCourse = courseList.get(getLayoutPosition());
 					AVUser creator = currentCourse.getCreator();
 					AVObject creator1 = null;
@@ -93,6 +97,7 @@ public class RegistrationFragmentRecyclerViewAdapter extends RecyclerView.Adapte
 							currentCourse.refreshInBackground(new RefreshCallback<AVObject>() {
 								@Override
 								public void done(AVObject avObject, AVException e) {
+									progressDialog.dismiss();
 									final Course course = (Course) avObject;
 									final String serializedString = course.toString();
 									new InfoDialog(mActivity, serializedString, username, true, new InfoDialog.OnInfoDialogListener() {
