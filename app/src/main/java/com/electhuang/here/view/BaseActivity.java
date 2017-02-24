@@ -45,7 +45,7 @@ public class BaseActivity extends AppCompatActivity {
 	 */
 	public Toolbar initToolbar(String title) {
 		Toolbar toolbar =  (Toolbar) findViewById(R.id.toolbar);
-		setStatusBarColor(mActivity,0xFF0288d1);
+		setStatusBarColor(mActivity,0xFF4FC7D2);
 		toolbar.setTitle(title);
 		setSupportActionBar(toolbar);
 		android.support.v7.app.ActionBar actionBar = getSupportActionBar();

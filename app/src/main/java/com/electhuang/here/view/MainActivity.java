@@ -4,6 +4,8 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,18 +21,24 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVRelation;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
+import com.avos.avoscloud.GetDataCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.electhuang.here.R;
+import com.electhuang.here.application.HereApplication;
 import com.electhuang.here.presenter.MainPresenter;
 import com.electhuang.here.presenter.ipresenterbind.IMainPresenter;
 import com.electhuang.here.view.iviewbind.IMainActivity;
@@ -50,6 +58,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 	private Toolbar toolbar;
 	private final int ADD_SUCCEED = 11;
 	private final int SDK_PERMISSION_REQUEST = 100;
+	private Menu mBottomMenu;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +163,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 	 */
 	private void initBottomNavigationView() {
 		BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
+		mBottomMenu = bottomNavigationView.getMenu();
 		bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView
 				.OnNavigationItemSelectedListener() {
 
@@ -164,6 +174,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 						if (registrationFragment == null) {
 							registrationFragment = new RegistrationFragment();
 						}
+						mBottomMenu.getItem(0).setChecked(true);
+						mBottomMenu.getItem(1).setChecked(false);
+						mBottomMenu.getItem(2).setChecked(false);
 						switchContent(registrationFragment);
 						toolbar.setTitle("这里签到·Here");
 						break;
@@ -171,6 +184,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 						if (registrationFragment == null) {
 							courseManageFragment = new CourseManageFragment();
 						}
+						mBottomMenu.getItem(0).setChecked(false);
+						mBottomMenu.getItem(1).setChecked(true);
+						mBottomMenu.getItem(2).setChecked(false);
 						switchContent(courseManageFragment);
 						toolbar.setTitle("添加签到");
 						break;
@@ -178,6 +194,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 						if (registrationFragment == null) {
 							accountFragment = new AccountFragment();
 						}
+						mBottomMenu.getItem(0).setChecked(false);
+						mBottomMenu.getItem(1).setChecked(false);
+						mBottomMenu.getItem(2).setChecked(true);
 						switchContent(accountFragment);
 						toolbar.setTitle("设置");
 						break;
@@ -236,6 +255,34 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
 		NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 		navigationView.setNavigationItemSelectedListener(this);
+
+		View headerView = navigationView.getHeaderView(0);
+		final ImageView iv_avatar = (ImageView) headerView.findViewById(R.id.iv_avatar);
+		TextView tv_name = (TextView) headerView.findViewById(R.id.tv_name);
+		TextView tv_phoneNumber = (TextView) headerView.findViewById(R.id.tv_phoneNumber);
+
+		String username = HereApplication.currentUser.getUsername();
+		String mobilePhoneNumber = HereApplication.currentUser.getMobilePhoneNumber();
+		AVFile avatarFile = HereApplication.currentUser.getAVFile("avatar");
+
+		tv_name.setText(username);
+		tv_phoneNumber.setText(mobilePhoneNumber);
+		if (avatarFile != null) {
+			avatarFile.getDataInBackground(new GetDataCallback() {
+				@Override
+				public void done(byte[] bytes, AVException e) {
+					if (e == null) {
+						final Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								iv_avatar.setImageBitmap(bitmap);
+							}
+						});
+					}
+				}
+			});
+		}
 	}
 
 	@Override
@@ -265,18 +312,27 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 				registrationFragment = new RegistrationFragment();
 			}
 			switchContent(registrationFragment);
+			mBottomMenu.getItem(0).setChecked(true);
+			mBottomMenu.getItem(1).setChecked(false);
+			mBottomMenu.getItem(2).setChecked(false);
 			toolbar.setTitle("这里签到·Here");
 		} else if (id == R.id.add) {
 			if (registrationFragment == null) {
 				courseManageFragment = new CourseManageFragment();
 			}
 			switchContent(courseManageFragment);
+			mBottomMenu.getItem(0).setChecked(false);
+			mBottomMenu.getItem(1).setChecked(true);
+			mBottomMenu.getItem(2).setChecked(false);
 			toolbar.setTitle("添加签到");
 		} else if (id == R.id.setting) {
 			if (registrationFragment == null) {
 				accountFragment = new AccountFragment();
 			}
 			switchContent(accountFragment);
+			mBottomMenu.getItem(0).setChecked(false);
+			mBottomMenu.getItem(1).setChecked(false);
+			mBottomMenu.getItem(2).setChecked(true);
 			toolbar.setTitle("设置");
 		} else if (id == R.id.nav_share) {
 

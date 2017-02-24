@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
     tools:context="com.electhuang.here.view.DetailActivity">
-
     <LinearLayout
         style="@style/group_layout"
         android:layout_width="match_parent"
@@ -15,14 +16,17 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CourseName:"/>
+            android:text="课程名称:"
+            android:textSize="@dimen/default_font_size"/>
 
         <TextView
             android:id="@+id/tv_course_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Course"/>
+            android:text="Course"
+            android:textSize="@dimen/default_font_size"/>
     </LinearLayout>
+
     <LinearLayout
         style="@style/group_layout"
         android:layout_width="match_parent"
@@ -31,13 +35,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Teacher:"/>
+            android:text="教师:"
+            android:textSize="@dimen/default_font_size"/>
 
         <TextView
             android:id="@+id/tv_creator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Teacher"/>
+            android:text="Teacher"
+            android:textSize="@dimen/default_font_size"/>
     </LinearLayout>
 
     <LinearLayout
@@ -48,13 +54,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Classroom:"/>
+            android:text="上课教室:"
+            android:textSize="@dimen/default_font_size"/>
 
         <TextView
             android:id="@+id/tv_classroom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Classroom"/>
+            android:text="Classroom"
+            android:textSize="@dimen/default_font_size"/>
     </LinearLayout>
 
     <LinearLayout
@@ -107,13 +115,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="false"
-            android:text="无"/>
+            android:text="无"
+            android:textSize="@dimen/default_font_size"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_reg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal"
         android:visibility="gone">
 

@@ -31,7 +31,6 @@ public class RegistrationFragment extends BaseFragment implements IRegistrationF
 
 	private PullLoadMoreRecyclerView mPullLoadMoreRecyclerView;
 	private List<Course> mCourseList = new ArrayList<Course>();
-	private int page = 1;
 	private RegistrationFragmentRecyclerViewAdapter mRecyclerViewAdapter;
 	private IRegistrationPresenter registrationPresenter = new RegistrationPresenter();
 
@@ -63,9 +62,7 @@ public class RegistrationFragment extends BaseFragment implements IRegistrationF
 
 			@Override
 			public void onRefresh() {
-				page = 1;
 				mCourseList.clear();
-				Log.e("TAG", "onRefresh()");
 				setList();
 			}
 
@@ -81,10 +78,6 @@ public class RegistrationFragment extends BaseFragment implements IRegistrationF
 	public void onResume() {
 		super.onResume();
 		LogUtil.e(getClass(), "onResume");
-		/*if (mCourseList.size() != HereApplication.addedCourseList.size()) {
-			mRecyclerViewAdapter.notifyDataSetChanged();
-			LogUtil.e(getClass(), "两次");
-		}*/
 	}
 
 	@Override
@@ -100,7 +93,6 @@ public class RegistrationFragment extends BaseFragment implements IRegistrationF
 	}
 
 	protected void loadMore() {
-		page++;
 		setList();
 	}
 
@@ -108,7 +100,6 @@ public class RegistrationFragment extends BaseFragment implements IRegistrationF
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				Log.e("TAG", "setList()");
 				List<Course> courseList = registrationPresenter.getAddedCourse(HereApplication.currentUser, new
 						IRegistrationPresenter.OnGetAddedCourseListener() {
 
@@ -133,7 +124,6 @@ public class RegistrationFragment extends BaseFragment implements IRegistrationF
 					}
 				});
 				mCourseList.addAll(courseList);
-				Log.e("TAG", "courseList长度:" + mCourseList.size());
 				getActivity().runOnUiThread(new Runnable() {
 					@Override
 					public void run() {

@@ -80,8 +80,6 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
 		String schoolNumber = (String) HereApplication.currentUser.get("schoolNumber");
 		AVFile avatarFile = HereApplication.currentUser.getAVFile("avatar");
 		if (avatarFile != null) {
-			//Uri uri = Uri.parse(avatarFile.getUrl());
-			//iv_avatar.setImageURI(uri);
 			avatarFile.getDataInBackground(new GetDataCallback() {
 				@Override
 				public void done(byte[] bytes, AVException e) {

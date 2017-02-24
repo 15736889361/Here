@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.RefreshCallback;
 import com.electhuang.here.R;
 import com.electhuang.here.beans.Course;
@@ -74,23 +76,35 @@ public class RegistrationFragmentRecyclerViewAdapter extends RecyclerView.Adapte
 				@Override
 				public void onClick(View view) {
 					final Course currentCourse = courseList.get(getLayoutPosition());
-					final String username = currentCourse.getCreator().getUsername();
-					//先同步云端数据，防止签到状态没有更新
-					//String key = "isRegNow";
-					currentCourse.refreshInBackground(new RefreshCallback<AVObject>() {
+					AVUser creator = currentCourse.getCreator();
+					AVObject creator1 = null;
+					try {
+						creator1 = AVObject.createWithoutData(AVUser.class, creator.getObjectId());
+					} catch (AVException e) {
+						e.printStackTrace();
+					}
+					creator1.fetchInBackground(new GetCallback<AVObject>() {
 						@Override
 						public void done(AVObject avObject, AVException e) {
-							final Course course = (Course) avObject;
-							final String serializedString = course.toString();
-							new InfoDialog(mActivity, serializedString, username, true, new InfoDialog.OnInfoDialogListener() {
+							AVUser creator_ = (AVUser) avObject;
+							final String username = creator_.getUsername();
+							//先同步云端数据，防止签到状态没有更新
+							//String key = "isRegNow";
+							currentCourse.refreshInBackground(new RefreshCallback<AVObject>() {
 								@Override
-								public void click() {
-									//Toast.makeText(mActivity, "签到", Toast.LENGTH_SHORT).show();
-									Intent intent = new Intent(mActivity, DetailActivity.class);
-									intent.putExtra("currentCourse", serializedString);
-									mActivity.startActivity(intent);
+								public void done(AVObject avObject, AVException e) {
+									final Course course = (Course) avObject;
+									final String serializedString = course.toString();
+									new InfoDialog(mActivity, serializedString, username, true, new InfoDialog.OnInfoDialogListener() {
+										@Override
+										public void click() {
+											Intent intent = new Intent(mActivity, DetailActivity.class);
+											intent.putExtra("currentCourse", serializedString);
+											mActivity.startActivity(intent);
+										}
+									}).show();
 								}
-							}).show();
+							});
 						}
 					});
 				}

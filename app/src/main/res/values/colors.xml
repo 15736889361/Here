@@ -8,4 +8,5 @@
     <color name="black">#b3adad</color>
     <color name="line_color">#f4d9d5d5</color>
     <color name="backgroundColor">#ededed</color>
+    <color name="transparent_background">#51000000</color>
 </resources>

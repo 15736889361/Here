@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,11 +26,13 @@ public class InfoDialog extends Dialog implements View.OnClickListener {
 	private boolean regAble, isAdded;
 	private Course course;
 	private final View view;
+	private Activity context;
 
 	public InfoDialog(Activity context, String currentCourse, String creator, boolean regAble, OnInfoDialogListener listener) {
 		//super(context, R.style.Dialog);
 		super(context);
 		setTitle("详细信息");
+		this.context = context;
 		this.listener = listener;
 		this.currentCourse = currentCourse;
 		this.creator = creator;
@@ -42,7 +46,6 @@ public class InfoDialog extends Dialog implements View.OnClickListener {
 		super.onCreate(savedInstanceState);
 		try {
 			course = (Course) Course.parseAVObject(currentCourse);
-			//Log.e("TAG", "avObject" + avObject);
 			for (Course course_ : HereApplication.addedCourseList) {
 				if (course_.getObjectId().equals(course.getObjectId())) {
 					isAdded = true;
@@ -122,5 +125,16 @@ public class InfoDialog extends Dialog implements View.OnClickListener {
 	public interface OnInfoDialogListener {
 
 		void click();
+	}
+
+	@Override
+	public void show() {
+		WindowManager wm = context.getWindowManager();
+		int width = wm.getDefaultDisplay().getWidth();
+		Window window = this.getWindow();
+		WindowManager.LayoutParams layoutParams = window.getAttributes();
+		layoutParams.width = width / 10 * 9;
+		window.setAttributes(layoutParams);
+		super.show();
 	}
 }
