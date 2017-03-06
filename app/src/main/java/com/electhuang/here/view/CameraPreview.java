@@ -161,7 +161,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 				if (rotation == mOrientation)
 					return;
 				mOrientation = rotation;
-				updateCameraOrientation();
+				if (mCamera != null) {
+					updateCameraOrientation();
+				}
 			}
 		};
 		mOrEventListener.enable();
@@ -169,7 +171,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 	@Override
 	public void surfaceChanged(SurfaceHolder surfaceHolder, int format, int width, int height) {
-		updateCameraOrientation();
+		if (mCamera != null) {
+			updateCameraOrientation();
+		}
 	}
 
 	private void updateCameraOrientation() {

@@ -1,9 +1,12 @@
 package com.electhuang.here.view;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,7 +23,9 @@ import com.electhuang.here.R;
  */
 public class BaseActivity extends AppCompatActivity {
 
+	private static final int REQUEST_PERMISSION = 100;
 	public Activity mActivity;
+	private onPermissionCallbackListener onPermissionCallbackListener;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,12 +45,13 @@ public class BaseActivity extends AppCompatActivity {
 
 	/**
 	 * 初始化状态栏
+	 *
 	 * @param title
 	 * @return
 	 */
 	public Toolbar initToolbar(String title) {
-		Toolbar toolbar =  (Toolbar) findViewById(R.id.toolbar);
-		setStatusBarColor(mActivity,0xFF4FC7D2);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setStatusBarColor(mActivity, 0xFF4FC7D2);
 		toolbar.setTitle(title);
 		setSupportActionBar(toolbar);
 		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
@@ -112,5 +118,52 @@ public class BaseActivity extends AppCompatActivity {
 				return super.onOptionsItemSelected(item);
 		}
 		return true;
+	}
+
+	/**
+	 * 动态申请权限，请确保已经申请过权限，在判断用户没有允许情况下才使用该方法
+	 * @param permission
+	 * @param onPermissionCallbackListener
+	 */
+	@TargetApi(23)
+	public void requestRuntimePermission(String permission, onPermissionCallbackListener onPermissionCallbackListener) {
+		this.onPermissionCallbackListener = onPermissionCallbackListener;
+		switch (checkSelfPermission(permission)) {
+			case PackageManager.PERMISSION_GRANTED:
+				if (this.onPermissionCallbackListener != null) {
+					onPermissionCallbackListener.onGranted();
+				}
+				break;
+			case PackageManager.PERMISSION_DENIED:
+				if (shouldShowRequestPermissionRationale(permission)) {
+					requestPermissions(new String[]{permission}, REQUEST_PERMISSION);
+				}
+				break;
+			default:
+				break;
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		if (requestCode == REQUEST_PERMISSION) {
+			if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+				if (onPermissionCallbackListener != null) {
+					onPermissionCallbackListener.onGranted();
+				}
+			} else {
+				if (onPermissionCallbackListener != null) {
+					onPermissionCallbackListener.onDenied();
+				}
+			}
+		}
+	}
+
+	public interface onPermissionCallbackListener {
+
+		void onGranted();
+
+		void onDenied();
 	}
 }

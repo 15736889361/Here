@@ -1,11 +1,18 @@
 package com.electhuang.here.view;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -24,9 +31,15 @@ import com.electhuang.here.R;
 import com.electhuang.here.presenter.LoginPresenter;
 import com.electhuang.here.view.iviewbind.ILoginActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LoginActivity extends BaseActivity implements ILoginActivity, View
 		.OnClickListener {
 
+	private static final int REQUEST_CODE_FIRST = 100;
+	private static final int REQUEST_CODE_LOGIN = 101;
+	private static final int REQUEST_CODE_REGISTER = 102;
 	private Toolbar toolbar;
 	private LoginPresenter loginPresenter = new LoginPresenter(LoginActivity.this);
 	private AutoCompleteTextView et_mPhoneNumber;
@@ -40,6 +53,9 @@ public class LoginActivity extends BaseActivity implements ILoginActivity, View
 		setContentView(R.layout.activity_login);
 		initView();
 		initToolbar(getString(R.string.login));
+		if (Build.VERSION.SDK_INT >= 23) {
+			getPermission();
+		}
 	}
 
 	/**
@@ -184,11 +200,87 @@ public class LoginActivity extends BaseActivity implements ILoginActivity, View
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.login_button:
-				login();
+				if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+					showGetPermissionDialog(REQUEST_CODE_LOGIN);
+				} else {
+					login();
+				}
 				break;
 			case R.id.register_button:
-				startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-				LoginActivity.this.finish();
+				if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+					showGetPermissionDialog(REQUEST_CODE_REGISTER);
+				} else {
+					startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+					LoginActivity.this.finish();
+				}
+				break;
+		}
+	}
+
+	/**
+	 * 弹出提示需要获取权限的对话框
+	 */
+	@TargetApi(Build.VERSION_CODES.M)
+	private void showGetPermissionDialog(final int requestCode) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+		builder.setTitle("提示");
+		builder.setMessage("应用需要获取定位和摄像头权限，才能完成签到");
+		builder.setNegativeButton("同意", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				boolean canTip = shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+				if (!canTip) {
+					//跳转到权限管理界面让用户自己授予权限
+					Intent intent = new Intent();
+					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+					intent.setData(Uri.fromParts("package", getPackageName(), null));
+					startActivity(intent);
+				} else {
+					//申请权限
+					requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, requestCode);
+				}
+			}
+		});
+		builder.setPositiveButton("取消", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+
+			}
+		});
+		builder.show();
+	}
+
+	@TargetApi(23)
+	public void getPermission() {
+		List<String> permissions = new ArrayList<>();
+		if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED) {
+			permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+		}
+		if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+			permissions.add(Manifest.permission.CAMERA);
+		}
+		if (permissions.size() > 0) {
+			requestPermissions(permissions.toArray(new String[permissions.size()]), REQUEST_CODE_FIRST);
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		switch (requestCode) {
+			case REQUEST_CODE_FIRST:
+				break;
+			case REQUEST_CODE_LOGIN:
+				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					login();
+				}
+				break;
+			case REQUEST_CODE_REGISTER:
+				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+					LoginActivity.this.finish();
+				}
 				break;
 		}
 	}

@@ -66,7 +66,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 		setContentView(R.layout.activity_main);
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		toolbar.setTitle("这里签到·Here");
-		getPermissions();
+		initView();
 	}
 
 	private void initView() {
@@ -87,31 +87,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 						mainPresenter.logout();
 						startActivity(new Intent(MainActivity.this, LoginActivity.class));
 						finish();
-						break;
-					case R.id.action_add_course:
-						AVQuery<AVObject> query = new AVQuery<>("Course");
-						query.include("creator");
-						query.whereEqualTo("courseName", "线性代数");
-						query.findInBackground(new FindCallback<AVObject>() {
-							@Override
-							public void done(List<AVObject> list, AVException e) {
-								//String objectId = HereApplication.currentUser.getObjectId();
-								//AVUser user = (AVUser) AVObject.createWithoutData("_User", objectId);
-								AVUser user = AVUser.getCurrentUser();
-								AVRelation<AVObject> relation = user.getRelation("courses");
-								relation.add(list.get(0));
-								user.saveInBackground(new SaveCallback() {
-									@Override
-									public void done(AVException e) {
-										if (e == null) {
-											Toast.makeText(MainActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
-										} else {
-											Toast.makeText(MainActivity.this, "添加失败", Toast.LENGTH_SHORT).show();
-										}
-									}
-								});
-							}
-						});
 						break;
 				}
 				return true;
@@ -343,71 +318,5 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 		DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawer.closeDrawer(GravityCompat.START);
 		return true;
-	}
-
-	/**
-	 * 根据Android版本动态获取权限，6.0以上需要动态获取权限
-	 */
-	private void getPermissions() {
-		if (Build.VERSION.SDK_INT >= 23) {
-			ArrayList<String> permissions = new ArrayList<String>();
-			int checkCoarsePermission = ContextCompat.checkSelfPermission(this, Manifest.permission
-					.ACCESS_COARSE_LOCATION);
-			int checkFinePermission = ContextCompat.checkSelfPermission(this, Manifest.permission
-					.ACCESS_FINE_LOCATION);
-			/*
-			 * 定位必须权限
-			 */
-			if (checkCoarsePermission != PackageManager.PERMISSION_GRANTED) {
-				permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-			}
-			if (checkFinePermission != PackageManager.PERMISSION_GRANTED) {
-				permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
-			}
-			/*
-			 * 读写权限，定位非必要
-			 */
-			//addPermission(permissions, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-			//addPermission(permissions, Manifest.permission.READ_EXTERNAL_STORAGE);
-			//addPermission(permissions, Manifest.permission.READ_PHONE_STATE);
-			if (permissions.size() > 0) {
-				ActivityCompat.requestPermissions(this, permissions.toArray(new String[permissions.size()]),
-						SDK_PERMISSION_REQUEST);
-			} else {
-				initView();
-			}
-		} else {
-			initView();
-		}
-	}
-
-	@TargetApi(23)
-	private boolean addPermission(ArrayList<String> permissionsList, String permission) {
-		if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) { // 如果应用没有获得对应权限,则添加到列表中,准备批量申请
-			if (shouldShowRequestPermissionRationale(permission)) {
-				return true;
-			} else {
-				permissionsList.add(permission);
-				return false;
-			}
-		} else {
-			return true;
-		}
-	}
-
-	@TargetApi(23)
-	@Override
-	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-		switch (requestCode) {
-			case SDK_PERMISSION_REQUEST:
-				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-					initView();
-				} else {
-					Toast.makeText(this, "获取权限失败，无法定位成功", Toast.LENGTH_SHORT).show();
-				}
-				break;
-			default:
-				super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-		}
 	}
 }
