@@ -1,12 +1,17 @@
 package com.electhuang.here.view;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -42,6 +47,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 
 	private static final int FACE_VERIFY_REQUEST = 10;
 	private static final int FACE_INIT_REQUEST = 11;
+	private static final int REQUEST_CODE = 100;
 	private MapView mapView = null;
 	private BaiduMap baiduMap;
 	private LocationClient locationClient;
@@ -222,36 +228,89 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.btn_reg:
-				Boolean faceVerify = (Boolean) HereApplication.currentUser.get("faceVerify");
-				if (faceVerify == null) {
-					faceVerify = false;
+				if (Build.VERSION.SDK_INT >= 23) {
+					if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+						showGetPermissionDialog(REQUEST_CODE);
+						return;
+					}
 				}
-				if (!faceVerify) {
-					new AlertDialog.Builder(mActivity)
-							.setTitle("提示")
-							.setMessage("你还没有设置人脸认证，是否马上设置")
-							.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialogInterface, int i) {
+				faceVerify();
+				break;
+		}
+	}
 
-								}
-							})
-							.setPositiveButton("好的", new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialogInterface, int i) {
-									if (checkCameraHardware(DetailActivity.this)) {
-										Intent intent = new Intent(mActivity, InitFaceActivity.class);
-										startActivityForResult(intent, FACE_INIT_REQUEST);
-									}
-								}
-							}).show();
-					return;
+	@TargetApi(23)
+	private void showGetPermissionDialog(final int requestCode) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("提示");
+		builder.setMessage("应用需要先获取照相机权限，才能使用验证身份功能");
+		builder.setNegativeButton("同意", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				boolean canTip = shouldShowRequestPermissionRationale(Manifest.permission.CAMERA);
+				if (!canTip) {
+					//跳转到权限管理界面让用户自己授予权限
+					Intent intent = new Intent();
+					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+					intent.setData(Uri.fromParts("package", getPackageName(), null));
+					startActivity(intent);
+				} else {
+					//申请权限
+					requestPermissions(new String[]{Manifest.permission.CAMERA}, requestCode);
 				}
-				if (checkCameraHardware(this)) {
-					Intent intent = new Intent(this, FaceVerifyActivity.class);
-					startActivityForResult(intent, FACE_VERIFY_REQUEST);
+			}
+		});
+		builder.setPositiveButton("取消", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+
+			}
+		});
+		builder.show();
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		switch (requestCode) {
+			case REQUEST_CODE:
+				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					faceVerify();
 				}
 				break;
+		}
+	}
+
+	private void faceVerify() {
+		Boolean faceVerify = (Boolean) HereApplication.currentUser.get("faceVerify");
+		if (faceVerify == null) {
+			faceVerify = false;
+		}
+		if (!faceVerify) {
+			new AlertDialog.Builder(mActivity)
+					.setTitle("提示")
+					.setMessage("你还没有设置人脸认证，是否马上设置")
+					.setNegativeButton("不了", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialogInterface, int i) {
+
+						}
+					})
+					.setPositiveButton("好的", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialogInterface, int i) {
+							if (checkCameraHardware(DetailActivity.this)) {
+								Intent intent = new Intent(mActivity, InitFaceActivity.class);
+								startActivityForResult(intent, FACE_INIT_REQUEST);
+							}
+						}
+					}).show();
+			return;
+		}
+		if (checkCameraHardware(this)) {
+			Intent intent = new Intent(this, FaceVerifyActivity.class);
+			startActivityForResult(intent, FACE_VERIFY_REQUEST);
 		}
 	}
 
