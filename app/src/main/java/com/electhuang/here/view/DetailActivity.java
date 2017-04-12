@@ -359,7 +359,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 			return true;
 		} else {
 			Toast.makeText(context, "该设备没有摄像头，请人工签到", Toast.LENGTH_SHORT).show();
-			// no camera on this device
+			// check_no camera on this device
 			return false;
 		}
 	}
